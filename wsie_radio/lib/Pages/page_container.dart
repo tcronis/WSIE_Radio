@@ -37,10 +37,7 @@ class __PageHolder extends State<PageHolder>{
           child: PageIndicatorContainer(
             pageView: PageView(
               children: <Widget>[
-                // StreamPage(),
-                // Text('2'),
-                // Text('3'),
-                // Text('4'),
+                Calendar(),
                 
                 //Insert all of your page widgets here
 
