@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:page_indicator/page_indicator.dart';
 
 import 'header_bar.dart';
+import 'stream_page.dart';
 // import 'streampage.dart';
 
 
@@ -38,7 +39,7 @@ class __PageHolder extends State<PageHolder>{
           child: PageIndicatorContainer(
             pageView: PageView(
               children: <Widget>[
-                // StreamPage(),
+                StreamPage(),
                 // Text('2'),
                 // Text('3'),
                 // Text('4'),
