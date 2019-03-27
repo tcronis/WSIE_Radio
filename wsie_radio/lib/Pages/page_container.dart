@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:page_indicator/page_indicator.dart';
 
 import 'header_bar.dart';
-// import 'streampage.dart';
-
+import 'email_donations_page.dart';
 
 const SIUERed = const Color(0xFFe41c24);
 class PageHolder extends StatefulWidget{
@@ -38,13 +37,7 @@ class __PageHolder extends State<PageHolder>{
           child: PageIndicatorContainer(
             pageView: PageView(
               children: <Widget>[
-                // StreamPage(),
-                // Text('2'),
-                // Text('3'),
-                // Text('4'),
-                
-                //Insert all of your page widgets here
-
+                EmailAndDonations(),
 
               ],
               controller: controller,
