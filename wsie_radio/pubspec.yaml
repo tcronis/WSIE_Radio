@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  page_indicator: ^0.1.3
   flutter:
     sdk: flutter
 
