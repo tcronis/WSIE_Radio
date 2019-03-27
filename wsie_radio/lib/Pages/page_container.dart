@@ -40,13 +40,6 @@ class __PageHolder extends State<PageHolder>{
             pageView: PageView(
               children: <Widget>[
                 StreamPage(),
-                // Text('2'),
-                // Text('3'),
-                // Text('4'),
-                
-                //Insert all of your page widgets here
-
-
               ],
               controller: controller,
             ),

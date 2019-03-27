@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../assets';
+
 
 const SIUERed = const Color(0xFFe41c24);
 class StreamPage extends StatefulWidget{
@@ -29,7 +31,7 @@ Widget __center(){
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
       Image.asset(
-        'assets/temp_cover.jpg',
+        '././assets/temp_cover.jpg',
         fit: BoxFit.contain,
       ),
       buttons,
