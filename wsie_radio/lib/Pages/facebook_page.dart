@@ -8,10 +8,15 @@ class FacebookFeed extends StatefulWidget{
 
 class __FacebookFeed extends State<FacebookFeed>{
 
-  @override
+   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      //start building code in here
+      color: Colors.white,
+      home: Scaffold(
+        body: new Container(
+          //now insert items
+        ),
+      ),
     );
   }
 
