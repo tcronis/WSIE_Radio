@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../Custom_Methods/song_info.dart';
 
 const SIUERed = const Color(0xFFe41c24);
 class StreamPage extends StatefulWidget{
@@ -66,6 +66,7 @@ final buttons = new Container(
           elevation: 4.0,
           splashColor: Colors.white10,
           onPressed: (){
+            refreshData();
           }
       ),
       new RaisedButton(
