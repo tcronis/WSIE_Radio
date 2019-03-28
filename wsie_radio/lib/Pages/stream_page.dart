@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../assets';
 
 
 const SIUERed = const Color(0xFFe41c24);
@@ -16,7 +15,7 @@ class __StreamPage extends State<StreamPage>{
       color: Colors.white,
       home: Scaffold(
         body: new Container(
-          padding: new EdgeInsets.all(2.5),
+          // padding: new EdgeInsets.all(2.5),
           child: __center(),
         ),
       ),
@@ -33,76 +32,28 @@ Widget __center(){
       Image.asset(
         '././assets/temp_cover.jpg',
         fit: BoxFit.contain,
+        width: 200,
+        height: 200,
       ),
       buttons,
-      list,
-//      scrollView,
+     scrollView,
     ],
   );
 }
 
-final scrollView = new SingleChildScrollView(
-  scrollDirection: Axis.vertical,
-  child: new Column(
-    children: <Widget>[
-      new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.black)
+final scrollView = new Expanded(
+  child: ListView.builder(
+    itemBuilder: (context, position) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text("This will be a value " + position.toString(), style: TextStyle(fontSize: 22.0),),
         ),
-        child: new Text("View 1"),
-      ),
-      new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.black)
-        ),
-        child: new Text("View 2"),
-      ),
-      new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.black)
-        ),
-        child: new Text("View 3"),
-      ),
-      new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.black)
-        ),
-        child: new Text("View 4"),
-      ),
-      new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.black)
-        ),
-        child: new Text("View 5"),
-      ),
-      new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.black)
-        ),
-        child: new Text("View 6"),
-      ),
-    ],
+      );
+    },
   ),
 );
 
-final list = new Text(
-  'material button',
-  style: TextStyle(
-    fontSize: 20.0, // insert your font size here
-  ),
-);
 
 final buttons = new Container(
   child: new Row(
