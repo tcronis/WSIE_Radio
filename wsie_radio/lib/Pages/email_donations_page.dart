@@ -8,10 +8,15 @@ class EmailAndDonations extends StatefulWidget{
 
 class __EmailAndDonations extends Stat<EmailAndDonations>{
   
-  @override
+   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      //insert code here
+      color: Colors.white,
+      home: Scaffold(
+        body: new Container(
+          //now insert items
+        ),
+      ),
     );
   }
 }
