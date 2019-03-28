@@ -8,13 +8,15 @@ class Calendar extends StatefulWidget{
 class __Calendar extends State<Calendar>{
 
   @override
-  Widget build (BuildContext context){
+  Widget build(BuildContext context){
     return MaterialApp(
-      //insert code here
+      color: Colors.white,
+      home: Scaffold(
+        body: new Container(
+          //now insert items
+        ),
+      ),
     );
-
-
-
   }
   
 }
