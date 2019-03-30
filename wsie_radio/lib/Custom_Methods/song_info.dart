@@ -13,7 +13,7 @@ Future<String> refreshData() async{
 
   var response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
   debugPrint(response.body.toString());
-  
+
 }
 
 
