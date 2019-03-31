@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
+import './network_exception_widget.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async' show Future;
@@ -187,18 +186,23 @@ Widget __songContainer(String date){
       future: getPost(date),
       builder: (BuildContext context, AsyncSnapshot snapshot){
         if(snapshot.hasData){
-          return new ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index){
-              return Card(
-                child:Padding(
-                  padding:const EdgeInsets.all(15.0),
-                  child: 
-                    Text("Title: ${snapshot.data[index].title}\n Artist: ${snapshot.data[index].artist}\n Time Played: ${snapshot.data[index].playtime}"),
-                )
-              );
-            },
-          );
+          if(snapshot.data.length > 0){
+            return new ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index){
+                return Card(
+                  child:Padding(
+                    padding:const EdgeInsets.all(15.0),
+                    child: 
+                      Text("Title: ${snapshot.data[index].title}\n Artist: ${snapshot.data[index].artist}\n Time Played: ${snapshot.data[index].playtime}"),
+                  )
+                );
+              },
+            );
+          }else{
+            return networkError();
+          }
+
         } else{
           return Center(
             child: new CircularProgressIndicator(),
@@ -217,22 +221,26 @@ Future <List<Post>> getPost(String date) async{
   temp += date.substring(5, 7);
   temp += date.substring(8,10);
 
-  
-  // print(temp);
-  String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
-  final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
-  if(response.statusCode == 200){
-    final jsonResponse = json.decode(response.body);
-    List<Post> data = new List<Post>();
-    for(int i=0; i < jsonResponse.length; i++){
-      data.add(new Post.fromJson(jsonResponse[i]));
+  try{
+    String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
+    final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
+    if(response.statusCode == 200){
+      final jsonResponse = json.decode(response.body);
+      List<Post> data = new List<Post>();
+      for(int i=0; i < jsonResponse.length; i++){
+        data.add(new Post.fromJson(jsonResponse[i]));
+      }
+      return data;
     }
-    return data;
+    else {
+      print("response code of bad http call: $response.statusCode");
+    }
+  }catch(e){
+    print("exception: $e");
+    List<Post> temp = new List<Post>();
+    return temp;
   }
-  else {
-    print("response code of bad http call: $response.statusCode");
-  }
-
+  // print(temp);
 }
 
 class Post{
