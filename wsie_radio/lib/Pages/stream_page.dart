@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './network_exception_widget.dart';
 import 'package:http/http.dart' as http;
 
-import 'dart:async' show Future;
+import 'dart:async';
 import 'dart:convert';
 
 
@@ -17,7 +17,8 @@ class __StreamPage extends State<StreamPage>{
 
   DateTime selectedDate = DateTime.now();
   bool playStream = false;
-
+  Timer _timer;
+  int timeInterval = 5;
 
   Future<Null> _selectDate(BuildContext context) async {
     
@@ -43,6 +44,22 @@ class __StreamPage extends State<StreamPage>{
     setState((){});
   }
   
+  void startRefresh(){
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+     (Timer timer) => setState(() {
+       if(timeInterval < 1 && playStream == true){
+         timeInterval = 5;
+         refresh();
+       }else if(timeInterval < 1 && playStream == false){
+         timeInterval = 5;
+         
+       }else if(timeInterval > 1 && playStream == true){
+         timeInterval = timeInterval - 1;
+       }
+     }));
+  }
 
   @override
   Widget build(BuildContext context){
@@ -74,11 +91,12 @@ class __StreamPage extends State<StreamPage>{
                         }
                     ),
                     new RaisedButton(
-                        child: const Text('Pause'),
+                        child: const Text('Stop'),
                         color: SIUERed,
                         elevation: 4.0,
                         splashColor: Colors.white10,
                         onPressed: (){
+                          
                         }
                     ),
                     new RaisedButton(
@@ -125,32 +143,43 @@ Widget __imageHold(bool play){
         future: (getPost(DateTime.now().toString())),
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.hasData){
-            return FutureBuilder(
-              future:__getAlbumURL(snapshot.data[0]),
-              builder: (BuildContext context2, AsyncSnapshot snapshot2){
-                if(snapshot2.hasData){
-                  if(snapshot2.data !=null){
-                    return Image.network(
-                      '${snapshot2.data}',
-                      height: 200,
-                      width: 200,
-                    );
+            if(snapshot.data.length > 0){
+              return FutureBuilder(
+                future:__getAlbumURL(snapshot.data[0]),
+                builder: (BuildContext context2, AsyncSnapshot snapshot2){
+                  if(snapshot2.hasData){
+                    if(snapshot2.data !=null){
+                      return Image.network(
+                        '${snapshot2.data}',
+                        height: 200,
+                        width: 200,
+                      );
+                    }else{
+                      return Image.asset(
+                        '././assets/WSIE_4CBlackBackground.jpg',
+                        fit: BoxFit.contain,
+                        width: 200,
+                        height: 200,
+                      );
+                    }
+                    
                   }else{
-                    return Image.asset(
-                      '././assets/WSIE_4CBlackBackground.jpg',
-                      fit: BoxFit.contain,
-                      width: 200,
-                      height: 200,
+                    return Center(
+                      child: new CircularProgressIndicator(),
                     );
                   }
-                  
-                }else{
-                  return Center(
-                    child: new CircularProgressIndicator(),
-                  );
-                }
-              },
-            );
+                },
+              );
+            }
+            else{
+              return Image.asset(
+                '././assets/WSIE_4CBlackBackground.jpg',
+                fit: BoxFit.contain,
+                width: 200,
+                height: 200,
+              );
+            }
+
           }else{
             return Center(
             child: new CircularProgressIndicator(),
