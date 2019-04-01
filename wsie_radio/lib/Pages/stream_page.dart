@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './network_exception_widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,15 +14,33 @@ class StreamPage extends StatefulWidget{
   State createState() => new __StreamPage();
 }
 
-class __StreamPage extends State<StreamPage>{
+class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<StreamPage>{
 
   DateTime selectedDate = DateTime.now();
   bool playStream = false;
-  Timer _timer;
+  Timer _timer; 
   int timeInterval = 5;
+  static const platform = const MethodChannel('wsie.get.radio/stream');
+
+  Future <void> _toggleRadio() async{
+    if(playStream == true){
+      try{
+        await platform.invokeMethod("playStream");
+      } on PlatformException catch(e){
+        print("Stream error: $e");
+      }
+    }else{
+      try{
+        await platform.invokeMethod("stopStream");
+      }on PlatformException catch(e){
+        print("Stream error: $e");
+      }
+    }
+
+    setState(() {});
+  }
 
   Future<Null> _selectDate(BuildContext context) async {
-    
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
@@ -44,22 +63,15 @@ class __StreamPage extends State<StreamPage>{
     setState((){});
   }
   
-  void startRefresh(){
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-     (Timer timer) => setState(() {
-       if(timeInterval < 1 && playStream == true){
-         timeInterval = 5;
-         refresh();
-       }else if(timeInterval < 1 && playStream == false){
-         timeInterval = 5;
-         
-       }else if(timeInterval > 1 && playStream == true){
-         timeInterval = timeInterval - 1;
-       }
-     }));
+
+  void refreshTimer(){
+    if(playStream == true){
+      _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer) => setState(() {}));
+    }
   }
+  
+
+
 
   @override
   Widget build(BuildContext context){
@@ -86,7 +98,11 @@ class __StreamPage extends State<StreamPage>{
                         splashColor: Colors.white10,
                         onPressed: (){
                           //make the call for the alumb art to update
+
                             __buildImage(context);
+                            refreshTimer();
+                            _toggleRadio();
+                           
                           //run code to start stream
                         }
                     ),
@@ -96,6 +112,9 @@ class __StreamPage extends State<StreamPage>{
                         elevation: 4.0,
                         splashColor: Colors.white10,
                         onPressed: (){
+                          playStream = false;
+                          _toggleRadio();
+                          refresh();
                           
                         }
                     ),
@@ -122,6 +141,8 @@ class __StreamPage extends State<StreamPage>{
     );
   }
 
+ @override
+  bool get wantKeepAlive => true;
 }
 
 //write it to refresh after a certian time to que for new album art
@@ -194,12 +215,11 @@ Widget __imageHold(bool play){
   Future<String> __getAlbumURL(Post data) async{
 
     String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;
-    // String url = "http://itunes.apple.com/search?term=Love On Top Doc Powell";
     final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
     if(response.statusCode == 200){
       final jsonResponse = json.decode(response.body);
       if(jsonResponse['resultCount'] > 0){
-        print(jsonResponse['results'][0]['artworkUrl100']);
+        // print(jsonResponse['results'][0]['artworkUrl100']);
         return jsonResponse['results'][0]['artworkUrl100'].toString();
       }
     }
