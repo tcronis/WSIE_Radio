@@ -25,78 +25,69 @@ import android.widget.ProgressBar;
 
 public class MainActivity extends FlutterActivity {
 
-  private MediaPlayer player;
-  private static final String CHANNEL = "wsie.get.radio/stream";
+    private MediaPlayer player;
+    private static final String CHANNEL = "wsie.get.radio/stream";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    GeneratedPluginRegistrant.registerWith(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        GeneratedPluginRegistrant.registerWith(this);
 
-    initializeMediaPlayer();
-
-    new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
-      new MethodCallHandler() {
-        @Override
-        public void onMethodCall(MethodCall call, Result result) {
-            if (call.method.equals("playStream")) {
-                startPlaying();
-                // System.out.println("START THE STREAM");
-                // result.success(startPlaying());
-            } else {
-                stopPlaying();
-                // System.out.println("STOP THE STREAM");
-                // result.success(stopPlay());
+        
+        new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
+        new MethodCallHandler() {
+            @Override
+            public void onMethodCall(MethodCall call, Result result) {
+                if(call.method.equals("createStreamData")){
+                    System.out.println("Initialzing the componenets-------------------------------------------------------");
+                    initializeMediaPlayer();
+                }
+                else if (call.method.equals("playStream")) {
+                    startPlaying();
+                } else {
+                    stopPlaying();
+                }
             }
-        }
 
-    });
-  }
-
-  private void initializeMediaPlayer() {
-      player = new MediaPlayer();
-
-      // player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-      //  player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-      try {  
-          player.setDataSource(this, Uri.parse("http://streaming.siue.edu:8000/wsie"));
-          // player.setOnPreparedListener(this);
-          player.prepareAsync();
-      } catch (IllegalArgumentException e) {
-          e.printStackTrace();
-      } catch (IllegalStateException e) {
-          e.printStackTrace();
-      } catch (IOException e) {
-          e.printStackTrace();
-      } 
-
-      player.setOnBufferingUpdateListener(new OnBufferingUpdateListener() {
-          public void onBufferingUpdate(MediaPlayer mp, int percent) {
-              // playSeekBar.setSecondaryProgress(percent);
-              Log.i("Buffering", "" + percent);
-          }
-      });
-  }
-
-  private void startPlaying() {
-
-    // player.start();
-
-    player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-            mp.start();
-        }
-    });
-  }
-
-  private void stopPlaying() {
-    if (player.isPlaying()) {
-        player.stop();
-        player.release();
-        initializeMediaPlayer();
+        });
     }
-}
+
+    private void initializeMediaPlayer() {
+        player = new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        System.out.println("trying the try catch------------------------------------------");
+        try {  
+            // player.setDataSource(MainActivity.this, Uri.parse("http://82.77.137.30:8557"));
+            player.setDataSource("http://streaming.siue.edu:8000/wsie");
+            // player.prepareAsync();
+            // player.start();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+    }
+
+    private void startPlaying() {
+        System.out.println("Trying the start -------------------------");
+        // player.prepareAsync();
+        player.setOnPreparedListener(new OnPreparedListener() {
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+    }
+
+    private void stopPlaying() {
+        System.out.println("Trying the stop -------------------------");
+        if (player.isPlaying()) {
+            player.stop();
+            player.release();
+            initializeMediaPlayer();
+        }
+    }
 
 }
 

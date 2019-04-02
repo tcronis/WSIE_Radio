@@ -9,7 +9,10 @@ import 'dart:convert';
 
 
 const SIUERed = const Color(0xFFe41c24);
+const platform = const MethodChannel('wsie.get.radio/stream');
+
 class StreamPage extends StatefulWidget{
+
   @override
   State createState() => new __StreamPage();
 }
@@ -20,10 +23,23 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   bool playStream = false;
   Timer _timer; 
   int timeInterval = 5;
-  static const platform = const MethodChannel('wsie.get.radio/stream');
+  static bool initalCreation = false;
+
+  @override
+  void initState() {
+    _toggleRadio();
+  }
 
   Future <void> _toggleRadio() async{
-    if(playStream == true){
+    if(initalCreation == false){
+      try{
+        print("initial creation: \n");
+        initalCreation = true;
+        await platform.invokeMethod("createStreamData");
+      } on PlatformException catch(e){
+        print("Stream error: $e");
+      }
+    }else if(playStream == true){
       try{
         await platform.invokeMethod("playStream");
       } on PlatformException catch(e){
@@ -36,7 +52,6 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         print("Stream error: $e");
       }
     }
-
     setState(() {});
   }
 
