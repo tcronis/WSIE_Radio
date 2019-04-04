@@ -25,21 +25,8 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   int timeInterval = 5;
   static bool initalCreation = false;
 
-  @override
-  void initState() {
-    _toggleRadio();
-  }
-
   Future <void> _toggleRadio() async{
-    if(initalCreation == false){
-      try{
-        print("initial creation: \n");
-        initalCreation = true;
-        await platform.invokeMethod("createStreamData");
-      } on PlatformException catch(e){
-        print("Stream error: $e");
-      }
-    }else if(playStream == true){
+    if(playStream == true){
       try{
         await platform.invokeMethod("playStream");
       } on PlatformException catch(e){
@@ -72,21 +59,18 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   Future<Null> __buildImage(BuildContext conext) async{
     playStream = true;
     refresh();
+    // setState((){});
   }
 
   refresh(){
     setState((){});
   }
   
-
   void refreshTimer(){
     if(playStream == true){
       _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer) => setState(() {}));
     }
   }
-  
-
-
 
   @override
   Widget build(BuildContext context){
@@ -130,7 +114,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                           playStream = false;
                           _toggleRadio();
                           refresh();
-                          
+                          // setState((){});
                         }
                     ),
                     new RaisedButton(
