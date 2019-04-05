@@ -9,7 +9,7 @@ class Calendar extends StatefulWidget{
   State createState() => new __Calendar();
 }
 
-class __Calendar extends State<Calendar>{
+class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Calendar>{
   //final List<Date> dateEvents;
  //__Calendar(this.dateEvents);
 
@@ -38,4 +38,7 @@ class __Calendar extends State<Calendar>{
     );
   }
   
+
+  @override
+  bool get wantKeepAlive => true;
 }
