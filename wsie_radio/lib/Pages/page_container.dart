@@ -45,6 +45,7 @@ class __PageHolder extends State<PageHolder>{
                 
                 //Insert all of your page widgets here
 
+                EmailAndDonations(),
 
               ],
               controller: controller,
