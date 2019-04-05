@@ -12,10 +12,10 @@ Widget headerBar(){
             color: Colors.black,
           ),
         ),
-        Image.asset(
-          'assets/WSIE_4CBlackBackground.jpg',
-          fit: BoxFit.contain,
-        ),
+        // Image.asset(
+        //   'assets/WSIE_4CBlackBackground.jpg',
+        //   fit: BoxFit.contain,
+        // ),
       ],
     ),
     backgroundColor: SIUERed,
