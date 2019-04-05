@@ -24,7 +24,7 @@ dependencies:
   http: ^0.12.0+1
   flutter:
     sdk: flutter
-  
+  splashscreen:
 
   
   # The following adds the Cupertino Icons font to your application.
@@ -53,9 +53,9 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/SIUE_Cougar.png
-    - assets/temp_cover.jpg
-    - WSIE_4CBlackBackground.jpg
-    - WSIE_4COriginal.jpg
+    - assets/siue_logo.jpg
+    - assets/WSIE_4CBlackBackground.jpg
+    - assets/WSIE_4COriginal.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
