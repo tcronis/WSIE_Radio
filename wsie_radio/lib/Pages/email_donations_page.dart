@@ -53,9 +53,6 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                       ),
                     ),
                   ),
-
-
-
                 ],
               ),
           Padding(
@@ -76,7 +73,6 @@ class __EmailAndDonations extends State<EmailAndDonations>{
           ),
               new Row(
                 children: <Widget>[
-
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
                     child: Container(
@@ -99,8 +95,6 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                       alignment: FractionalOffset(.06,.05),
                     ),
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.fromLTRB(4, 50, 0, 0),
                     child: RaisedButton(
@@ -176,8 +170,6 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                 ),
               ),
               Divider(),
-
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: ButtonTheme(
@@ -196,7 +188,6 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                   ),
                 ),
               ),
-
             ],
           )
         ),
