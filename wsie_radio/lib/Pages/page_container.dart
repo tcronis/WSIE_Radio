@@ -5,6 +5,8 @@ import 'header_bar.dart';
 import 'stream_page.dart';
 // import 'streampage.dart';
 
+import 'header_bar.dart';
+import 'calendar_page.dart';
 
 const SIUERed = const Color(0xFFe41c24);
 class PageHolder extends StatefulWidget{
@@ -42,6 +44,11 @@ class __PageHolder extends State<PageHolder>{
                 StreamPage(),
                 Text("Test Page 2"),
                 Text("Test Page 3"),
+                Calendar(),
+                
+                //Insert all of your page widgets here
+
+
               ],
               controller: controller,
             ),
