@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './network_exception_widget.dart';
 import 'package:http/http.dart' as http;
-
 import 'dart:async';
 import 'dart:convert';
-
-
 
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
