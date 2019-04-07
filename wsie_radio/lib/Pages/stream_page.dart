@@ -145,7 +145,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 Widget __imageHold(bool play){
   if(play == false){
     return Image.asset(
-      '././assets/WSIE_4CBlackBackground.jpg',
+      '././assets/WSIE_4COriginal.jpg',
       fit: BoxFit.contain,
       width: 200,
       height: 200,
@@ -173,7 +173,7 @@ Widget __imageHold(bool play){
                       );
                     }else{
                       return Image.asset(
-                        '././assets/WSIE_4CBlackBackground.jpg',
+                        '././assets/WSIE_4COriginal.jpg',
                         fit: BoxFit.contain,
                         width: 200,
                         height: 200,
@@ -190,7 +190,7 @@ Widget __imageHold(bool play){
             }
             else{
               return Image.asset(
-                '././assets/WSIE_4CBlackBackground.jpg',
+                '././assets/WSIE_4COriginal.jpg',
                 fit: BoxFit.contain,
                 width: 200,
                 height: 200,
