@@ -171,8 +171,8 @@ Widget __imageHold(bool play){
                     if(snapshot2.data !=null){
                       return Image.network(
                         '${snapshot2.data}',
-                        height: 200,
-                        width: 200,
+                        height: 500,
+                        width: 500,
                       );
                     }else{
                       return Image.asset(
@@ -218,8 +218,25 @@ Widget __imageHold(bool play){
     if(response.statusCode == 200){
       final jsonResponse = json.decode(response.body);
       if(jsonResponse['resultCount'] > 0){
+        int numResults = int.parse(jsonResponse['resultCount'].toString());
+        int best = 0;
+        if(numResults > 1){
+          for(int i=0; i < numResults; i++){
+            int count = 0;
+            if(data.artist.toUpperCase() == jsonResponse['artistName'].toString().toUpperCase()){
+              count++;
+            }
+            if(data.album.toLowerCase() == jsonResponse['trackName'].toString().toUpperCase()){
+              count++;
+            }
+            if(count >= best){
+              best = count;
+            }
+          }
+        }
+
         // print(jsonResponse['results'][0]['artworkUrl100']);
-        return jsonResponse['results'][0]['artworkUrl100'].toString();
+        return jsonResponse['results'][best]['artworkUrl100'].toString();
       }
     }
     else {
@@ -315,55 +332,3 @@ class Post{
   }
   
 }
-
-// final buttons = new Container(
-//   child: new Row(
-//     mainAxisSize: MainAxisSize.max,
-//     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//     children: <Widget>[
-//       new RaisedButton(
-//           child: const Text('Play'),
-//           color: SIUERed,
-//           elevation: 4.0,
-//           splashColor: Colors.white10,
-//           onPressed: (){
-//             getPost();
-//           }
-//       ),
-//       new RaisedButton(
-//           child: const Text('Pause'),
-//           color: SIUERed,
-//           elevation: 4.0,
-//           splashColor: Colors.white10,
-//           onPressed: (){
-//           }
-//       ),
-//        new RaisedButton(
-//           child: const Text('Select Date'),
-//           color: SIUERed,
-//           elevation: 4.0,
-//           splashColor: Colors.white10,
-//           onPressed: (){
-//             // _selectDate(context);
-
-//           }
-//       ),
-//     ],
-//   ),
-// );
-
-
-// Future<Null> _selectDate(BuildContext context) async{
-//   DateTime _date = new DateTime.now();
-
-//   final DateTime picked = await showDatePicker(
-//     context: context,
-//     initialDate: (_date),
-//     firstDate:  new DateTime(2016),
-//     lastDate: new DateTime(2019),
-//   );
-
-//   if(picked != null ){
-//     print("Date Selected: ${picked}");
-//   }
-// }
