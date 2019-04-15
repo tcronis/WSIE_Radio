@@ -13,7 +13,7 @@ class __FacebookFeed extends State<FacebookFeed> {
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
         child: Text(
-          'Facebook Feed',
+          'News Feed',
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.black,
