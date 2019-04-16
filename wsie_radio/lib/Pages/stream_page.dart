@@ -239,7 +239,7 @@ Widget __songContainer(String date){
                   child:Padding(
                     padding:const EdgeInsets.all(15.0),
                     child: 
-                      Text("Title: ${snapshot.data[index].title}\n Artist: ${snapshot.data[index].artist}\n Time Played: ${snapshot.data[index].playtime}"),
+                      Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
                   )
                 );
               },
