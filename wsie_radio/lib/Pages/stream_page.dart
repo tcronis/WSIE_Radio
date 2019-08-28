@@ -42,6 +42,8 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     setState(() {});
   }
 
+
+  //Date selection, will open a calendar and will need to be edited to match the fit of the rest of the application
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -66,11 +68,14 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     setState((){});
   }
   
+  //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
     if(playStream == true){
       _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer) => setState(() {}));
     }
   }
+
+  String playStopText = "Play";
 
   @override
   Widget build(BuildContext context){
@@ -91,32 +96,40 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     new RaisedButton(
-                        child: const Text('Play'),
+                        child: new Text(playStopText),
                         color: SIUERed,
                         elevation: 4.0,
                         splashColor: Colors.white10,
                         onPressed: (){
-                          //make the call for the alumb art to update
-
-                            __buildImage(context);
-                            refreshTimer();
+                          //Two different blocks for playing and stopping the radio
+                            //this will build the play data and grab the album artwork if at all possible
+                          if(playStopText == "Play"){
+                              __buildImage(context);
+                              refreshTimer();
+                              _toggleRadio();
+                              playStopText = "Stop";
+                          }
+                            //this will stop the state radio and prepare it for the next time that it is pressed play
+                          else{
+                            playStream = false;
+                            playStopText = "Play";
                             _toggleRadio();
-                           
-                          //run code to start stream
+                            refresh();
+                          }
                         }
                     ),
-                    new RaisedButton(
-                        child: const Text('Stop'),
-                        color: SIUERed,
-                        elevation: 4.0,
-                        splashColor: Colors.white10,
-                        onPressed: (){
-                          playStream = false;
-                          _toggleRadio();
-                          refresh();
-                          // setState((){});
-                        }
-                    ),
+                    // new RaisedButton(
+                    //     child: const Text('Stop'),
+                    //     color: SIUERed,
+                    //     elevation: 4.0,
+                    //     splashColor: Colors.white10,
+                    //     onPressed: (){
+                    //       playStream = false;
+                    //       _toggleRadio();
+                    //       refresh();
+                    //       // setState((){});
+                    //     }
+                    // ),
                     new RaisedButton(
                         child: const Text('Select Date'),
                         color: SIUERed,
@@ -171,8 +184,8 @@ Widget __imageHold(bool play){
                     if(snapshot2.data !=null){
                       return Image.network(
                         '${snapshot2.data}',
-                        height: 500,
-                        width: 500,
+                        height: 200,
+                        width: 200,
                       );
                     }else{
                       return Image.asset(
@@ -184,8 +197,11 @@ Widget __imageHold(bool play){
                     }
                     
                   }else{
-                    return Center(
-                      child: new CircularProgressIndicator(),
+                    return Image.asset(
+                      '././assets/WSIE_4CBlackBackground.jpg',
+                      fit: BoxFit.contain,
+                      width: 200,
+                      height: 200,
                     );
                   }
                 },
@@ -211,32 +227,49 @@ Widget __imageHold(bool play){
   }
 }
 
-  Future<String> __getAlbumURL(Post data) async{
 
-    String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;
-    final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
+
+
+  // API call to grab the album data, currently uses the iTune web API for building the album data
+  Future<String> __getAlbumURL(Post data) async{
+    String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
+    final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
     if(response.statusCode == 200){
-      final jsonResponse = json.decode(response.body);
+      final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
       if(jsonResponse['resultCount'] > 0){
-        int numResults = int.parse(jsonResponse['resultCount'].toString());
-        int best = 0;
-        if(numResults > 1){
+        int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
+        int best = -1;
+        int location = -1;
+        //if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
+          //based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE
+        if(numResults > 0){
           for(int i=0; i < numResults; i++){
-            int count = 0;
-            if(data.artist.toUpperCase() == jsonResponse['artistName'].toString().toUpperCase()){
+            int count = -1;  
+            if(data.artist.toUpperCase() == jsonResponse['results'][i]['artistName'].toString().toUpperCase())
               count++;
-            }
-            if(data.album.toLowerCase() == jsonResponse['trackName'].toString().toUpperCase()){
+            if(data.album.toLowerCase() == jsonResponse['results'][i]['trackName'].toString().toUpperCase())
               count++;
-            }
+            //if the track name and artist name both match and it is higher or equal to the best count (which keeps track of the best option) then it will become the best option
             if(count >= best){
-              best = count;
+              best = count; //setting as the new best
+              location = i; //setting the location of the new best in the array
             }
           }
-        }
+          //if sometype of matching artist name or track name was found then it will store it will display it's url
+          if(location != -1){
+            //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
+            String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
+            int pos = resultURL.indexOf('source') + 7;
+            String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
+            return finalUrl;
+          }
+          //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
+          else
+            return null;
 
-        // print(jsonResponse['results'][0]['artworkUrl100']);
-        return jsonResponse['results'][best]['artworkUrl100'].toString();
+        }
+        else
+          return null;
       }
     }
     else {
