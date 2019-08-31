@@ -44,9 +44,10 @@ class __PageHolder extends State<PageHolder>{
             pageView: PageView(
               children: <Widget>[
                 StreamPage(),
+                FacebookFeed(),
                 Calendar(),
                 EmailAndDonations(),
-                FacebookFeed(),
+
                 
                 //Insert all of your page widgets here
 
