@@ -51,6 +51,7 @@ public class MainActivity extends FlutterActivity {
     }
 
     private void startPlaying() {
+        System.out.println("Starting the player");
         //prepare the player
         player.prepareAsync();
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -68,12 +69,22 @@ public class MainActivity extends FlutterActivity {
         }
     }
     private void initializeMediaPlayer() {
+        System.out.println("attempting to initialize the media player");
         player = new MediaPlayer();
-        player.setAudioAttributes( new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build());
+        System.out.println("Media player created");
+        //Checking to see what type of API level the Android device is
+        if(Integer.valueOf(android.os.Build.VERSION.SDK) <= 25){
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        }else {
+            player.setAudioAttributes( new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build());
+        }
+
+        System.out.println("Attached the audio attributes");
         try {
+            System.out.println("Attempting to set the data source for the project");
             player.setDataSource(this, Uri.parse(url));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
