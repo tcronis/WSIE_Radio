@@ -13,6 +13,17 @@ class __FacebookFeed extends State<FacebookFeed> {
    return WebView(
       initialUrl: 'https://www.facebook.com/WSIE887theSound/',
       javascriptMode: JavascriptMode.disabled,
+      navigationDelegate: (NavigationRequest request) {
+        print(request.url.toString());
+        print(request.url);
+        if (request.url.toString().contains("WSIE887theSound") != true) {
+          print('blocking navigation to $request');
+          return NavigationDecision.prevent;
+        }else{
+          print('allowing navigation to $request');
+          return NavigationDecision.navigate;
+        }
+      },
     );
   }
 }
