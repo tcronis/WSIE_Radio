@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
-      seconds: 15,
+      seconds: 5,
       navigateAfterSeconds: new AfterSplash(),
       image: Image.asset(
           'assets/siue_logo.jpg',
