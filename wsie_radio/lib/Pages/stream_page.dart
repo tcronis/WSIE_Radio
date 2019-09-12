@@ -24,22 +24,30 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   Timer _timer; 
   int timeInterval = 5;
   static bool initalCreation = false;
+  static bool _mprunning = false;
 
   Future <void> _toggleRadio() async{
     if(playStream == true){
       try{
-        await platform.invokeMethod("playStream");
+        _mprunning = true;
+        final bool result = await platform.invokeMethod("playStream");
+        if(result == true)
+          _mprunning = false;
       } on PlatformException catch(e){
         print("Stream error: $e");
       }
     }else{
       try{
-        await platform.invokeMethod("stopStream");
+        _mprunning = true;
+        final bool result = await platform.invokeMethod("stopStream");
+        if(result == true)
+          _mprunning = false;
       }on PlatformException catch(e){
         print("Stream error: $e");
       }
     }
     setState(() {});
+    _mprunning = false;
   }
 
 
@@ -111,35 +119,25 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                               elevation: 4.0,
                               splashColor: Colors.white10,
                               onPressed: (){
-                                //Two different blocks for playing and stopping the radio
-                                  //this will build the play data and grab the album artwork if at all possible
-                                if(playStopText == "Play"){
-                                    __buildImage(context);
-                                    refreshTimer();
+                                if(_mprunning == false){
+                                  //Two different blocks for playing and stopping the radio
+                                    //this will build the play data and grab the album artwork if at all possible
+                                  if(playStopText == "Play"){
+                                      __buildImage(context);
+                                      refreshTimer();
+                                      _toggleRadio();
+                                      playStopText = "Stop";
+                                  }
+                                    //this will stop the state radio and prepare it for the next time that it is pressed play
+                                  else{
+                                    playStream = false;
+                                    playStopText = "Play";
                                     _toggleRadio();
-                                    playStopText = "Stop";
-                                }
-                                  //this will stop the state radio and prepare it for the next time that it is pressed play
-                                else{
-                                  playStream = false;
-                                  playStopText = "Play";
-                                  _toggleRadio();
-                                  refresh();
+                                    refresh();
+                                  }
                                 }
                               }
                           ),
-                          // new RaisedButton(
-                          //     child: const Text('Stop'),
-                          //     color: SIUERed,
-                          //     elevation: 4.0,
-                          //     splashColor: Colors.white10,
-                          //     onPressed: (){
-                          //       playStream = false;
-                          //       _toggleRadio();
-                          //       refresh();
-                          //       // setState((){});
-                          //     }
-                          // ),
                           new RaisedButton(
                               child: const Text('Select Date'),
                               color: SIUERed,
@@ -152,10 +150,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                         ],
                       ),
                     ),
-
-                  //song container 
                   __songContainer(selectedDate.toString()),
-
                   ],
                 ),
               ),

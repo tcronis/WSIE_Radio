@@ -10,6 +10,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import android.app.Activity;
 import android.os.Bundle;
 import java.io.IOException;
+import java.nio.channels.Channel;
+
 import android.util.Log;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -36,22 +38,22 @@ public class MainActivity extends FlutterActivity {
 
         //method channel for flutter to talk to android through
         new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
-        new MethodCallHandler() {
-            @Override
-            public void onMethodCall(MethodCall call, Result result) {
-                 if (call.method.equals("playStream")) {
-                    initializeMediaPlayer();
-                    startPlaying();
-                } else {
-                    stopPlaying();
+            new MethodCallHandler() {
+                @Override
+                public void onMethodCall(MethodCall call, Result result) {
+                    if (call.method.equals("playStream")) {
+                        initializeMediaPlayer();
+                        startPlaying();
+                        result.success(true);
+                    } else {
+                        stopPlaying();
+                        result.success(true);
+                    }
                 }
-            }
-
-        });
+            });
     }
 
     private void startPlaying() {
-        System.out.println("Starting the player");
         //prepare the player
         player.prepareAsync();
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -61,18 +63,16 @@ public class MainActivity extends FlutterActivity {
         });
     }
     private void stopPlaying() {
-        System.out.println("Stoping the media player");
         //checking to make sure the player is running, to avoid a bad state call
         if (player.isPlaying()) {
             player.stop();
+            player.reset();
             player.release();
-            initializeMediaPlayer();
+            player = null;
         }
     }
     private void initializeMediaPlayer() {
-        System.out.println("attempting to initialize the media player");
         player = new MediaPlayer();
-        System.out.println("Media player created");
         //Checking to see what type of API level the Android device is
         if(Integer.valueOf(android.os.Build.VERSION.SDK) <= 25){
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -82,10 +82,7 @@ public class MainActivity extends FlutterActivity {
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build());
         }
-
-        System.out.println("Attached the audio attributes");
         try {
-            System.out.println("Attempting to set the data source for the project");
             player.setDataSource(this, Uri.parse(url));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
