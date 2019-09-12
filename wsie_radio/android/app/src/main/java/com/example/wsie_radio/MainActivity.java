@@ -24,7 +24,7 @@ import android.net.Uri;
 
 public class MainActivity extends FlutterActivity {
 
-    private MediaPlayer player;
+    private static MediaPlayer player;
     private static final String CHANNEL = "wsie.get.radio/stream";
     private Boolean ready = false;
     private String url = "http://streaming.siue.edu:8000/wsie.mp3";
@@ -61,6 +61,7 @@ public class MainActivity extends FlutterActivity {
         });
     }
     private void stopPlaying() {
+        System.out.println("Stoping the media player");
         //checking to make sure the player is running, to avoid a bad state call
         if (player.isPlaying()) {
             player.stop();

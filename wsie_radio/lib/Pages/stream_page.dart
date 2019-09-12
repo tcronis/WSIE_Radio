@@ -79,78 +79,94 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
-      color: Colors.white,
-      home: Scaffold(
-        body: new Container(
-          // padding: new EdgeInsets.all(2.5),
-          // child: __center(),
-          child: new Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              __imageHold(playStream),
-              new Container(
-                child: new Row(
+    return Theme(
+      data: Theme.of(context).copyWith(
+        primaryColor: SIUERed,
+        accentColor: SIUERed,
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.accent
+        ),
+      ),
+      child: Builder(
+        builder: (context){
+          return MaterialApp(
+            color: Colors.white,
+            home: Scaffold(
+              body: new Container(
+                // padding: new EdgeInsets.all(2.5),
+                // child: __center(),
+                child: new Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    new RaisedButton(
-                        child: new Text(playStopText),
-                        color: SIUERed,
-                        elevation: 4.0,
-                        splashColor: Colors.white10,
-                        onPressed: (){
-                          //Two different blocks for playing and stopping the radio
-                            //this will build the play data and grab the album artwork if at all possible
-                          if(playStopText == "Play"){
-                              __buildImage(context);
-                              refreshTimer();
-                              _toggleRadio();
-                              playStopText = "Stop";
-                          }
-                            //this will stop the state radio and prepare it for the next time that it is pressed play
-                          else{
-                            playStream = false;
-                            playStopText = "Play";
-                            _toggleRadio();
-                            refresh();
-                          }
-                        }
+                    __imageHold(playStream),
+                    new Container(
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          new RaisedButton(
+                              child: new Text(playStopText),
+                              color: SIUERed,
+                              elevation: 4.0,
+                              splashColor: Colors.white10,
+                              onPressed: (){
+                                //Two different blocks for playing and stopping the radio
+                                  //this will build the play data and grab the album artwork if at all possible
+                                if(playStopText == "Play"){
+                                    __buildImage(context);
+                                    refreshTimer();
+                                    _toggleRadio();
+                                    playStopText = "Stop";
+                                }
+                                  //this will stop the state radio and prepare it for the next time that it is pressed play
+                                else{
+                                  playStream = false;
+                                  playStopText = "Play";
+                                  _toggleRadio();
+                                  refresh();
+                                }
+                              }
+                          ),
+                          // new RaisedButton(
+                          //     child: const Text('Stop'),
+                          //     color: SIUERed,
+                          //     elevation: 4.0,
+                          //     splashColor: Colors.white10,
+                          //     onPressed: (){
+                          //       playStream = false;
+                          //       _toggleRadio();
+                          //       refresh();
+                          //       // setState((){});
+                          //     }
+                          // ),
+                          new RaisedButton(
+                              child: const Text('Select Date'),
+                              color: SIUERed,
+                              elevation: 4.0,
+                              splashColor: Colors.white10,
+                              onPressed: (){
+                                _selectDate(context);
+                              }
+                          ),
+                        ],
+                      ),
                     ),
-                    // new RaisedButton(
-                    //     child: const Text('Stop'),
-                    //     color: SIUERed,
-                    //     elevation: 4.0,
-                    //     splashColor: Colors.white10,
-                    //     onPressed: (){
-                    //       playStream = false;
-                    //       _toggleRadio();
-                    //       refresh();
-                    //       // setState((){});
-                    //     }
-                    // ),
-                    new RaisedButton(
-                        child: const Text('Select Date'),
-                        color: SIUERed,
-                        elevation: 4.0,
-                        splashColor: Colors.white10,
-                        onPressed: (){
-                          _selectDate(context);
-                        }
-                    ),
+
+                  //song container 
+                  __songContainer(selectedDate.toString()),
+
                   ],
                 ),
               ),
-
-            //song container 
-            __songContainer(selectedDate.toString()),
-
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
+    // return MaterialApp(
+      
+    // );
   }
 
  @override
