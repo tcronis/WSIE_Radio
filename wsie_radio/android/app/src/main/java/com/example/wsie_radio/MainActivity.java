@@ -41,19 +41,24 @@ public class MainActivity extends FlutterActivity {
             new MethodCallHandler() {
                 @Override
                 public void onMethodCall(MethodCall call, Result result) {
+                    boolean initializerForMedia = false;
                     if (call.method.equals("playStream")) {
-                        initializeMediaPlayer();
-                        startPlaying();
-                        result.success(true);
+                        //this will check to make sure that the media player is initialized, else it will fail
+                        initializerForMedia = initializeMediaPlayer();
+                        if(initializerForMedia == false)
+                            result.success(false);
+                        else
+                            //Will return true after the steps are complete, so the andriod media player can't be spammed
+                            result.success(startPlaying());
                     } else {
-                        stopPlaying();
-                        result.success(true);
+                        //Will return true after the steps are complete, so the andriod media player can't be spammed
+                        result.success(stopPlaying());
                     }
                 }
             });
     }
 
-    private void startPlaying() {
+    private boolean startPlaying() {
         //prepare the player
         player.prepareAsync();
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -61,8 +66,9 @@ public class MainActivity extends FlutterActivity {
                 player.start();
             }
         });
+        return true;
     }
-    private void stopPlaying() {
+    private boolean stopPlaying() {
         //checking to make sure the player is running, to avoid a bad state call
         if (player.isPlaying()) {
             player.stop();
@@ -70,8 +76,10 @@ public class MainActivity extends FlutterActivity {
             player.release();
             player = null;
         }
+        return true;
     }
-    private void initializeMediaPlayer() {
+    private boolean initializeMediaPlayer() {
+        boolean success_failure = true;
         player = new MediaPlayer();
         //Checking to see what type of API level the Android device is
         if(Integer.valueOf(android.os.Build.VERSION.SDK) <= 25){
@@ -85,12 +93,16 @@ public class MainActivity extends FlutterActivity {
         try {
             player.setDataSource(this, Uri.parse(url));
         } catch (IllegalArgumentException e) {
+            success_failure = false;
             e.printStackTrace();
         } catch (IllegalStateException e) {
+            success_failure = false;
             e.printStackTrace();
         } catch (IOException e) {
+            success_failure = false;
             e.printStackTrace();
         }
+        return success_failure;
     }
 }
 
