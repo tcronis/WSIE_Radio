@@ -23,7 +23,6 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   bool playStream = false;
   Timer _timer; 
   int timeInterval = 5;
-  static bool initalCreation = false;
   static bool _mprunning = false;
 
   Future <void> _toggleRadio() async{
@@ -325,7 +324,7 @@ Widget __songContainer(String date){
 
 
 Future <List<Post>> getPost(String date) async{
-  // print(date);
+  print(date);
   String temp = date.substring(0,4);
   temp += date.substring(5, 7);
   temp += date.substring(8,10);
