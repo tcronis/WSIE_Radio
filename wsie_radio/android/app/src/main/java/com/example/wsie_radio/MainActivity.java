@@ -46,8 +46,9 @@ public class MainActivity extends FlutterActivity {
                     if (call.method.equals("playStream") && player == null) {
                         //this will check to make sure that the media player is initialized, else it will fail
                         initializerForMedia = initializeMediaPlayer();
-                        //Will return true after the steps are complete, so the andriod media player can't be spammed
-                        result.success(startPlaying());
+                        if(initializerForMedia == true)                        
+                            //Will return true after the steps are complete, so the andriod media player can't be spammed
+                            result.success(startPlaying());
                     } else {
                         //Will return true after the steps are complete, so the andriod media player can't be spammed
                         stopPlayingFlag = true;
@@ -94,20 +95,24 @@ public class MainActivity extends FlutterActivity {
         //Checking to see what type of API level the Android device is
         if(Integer.valueOf(android.os.Build.VERSION.SDK) <= 25){
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                player.setDataSource(this, Uri.parse(url));
+            } catch (IllegalArgumentException e) {
+                success_failure = false;
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                success_failure = false;
+                e.printStackTrace();
+            } catch (IOException e) {
+                success_failure = false;
+                e.printStackTrace();
+            }
+
         }else {
+            //this is for if the OS doesn't meet the requirements of API 25, it will just fail
+            success_failure = false;
         }
-        try {
-            player.setDataSource(this, Uri.parse(url));
-        } catch (IllegalArgumentException e) {
-            success_failure = false;
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            success_failure = false;
-            e.printStackTrace();
-        } catch (IOException e) {
-            success_failure = false;
-            e.printStackTrace();
-        }
+
         return success_failure;
     }
 }
