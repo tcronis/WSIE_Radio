@@ -299,11 +299,11 @@ Widget __songContainer(String date){
   int selectedDate = int.parse(temp.substring(0, 4));
   selectedDate += int.parse(temp.substring(5, 7));
   selectedDate += int.parse(temp.substring(8, 10));
-
+  //parse the date down to a number to compare with the selected date from the user
   int currentDate = int.parse(DateTime.now().toString().substring(0,4));
   currentDate += int.parse(DateTime.now().toString().substring(5,7));
   currentDate += int.parse(DateTime.now().toString().substring(8,10));
-  print(date);
+
   if(selectedDate > currentDate){
     return new Expanded(
       child: new ListView.builder(
