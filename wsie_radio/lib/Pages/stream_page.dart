@@ -26,12 +26,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   static bool _mprunning = false;
 
   Future <void> _toggleRadio() async{
+    //checking to see if the radio is streaming or if it needs to stop playing
     if(playStream == true){
       try{
-        _mprunning = true;
-        final bool result = await platform.invokeMethod("playStream");
+        _mprunning = true;  //toggle force wait on the radio to finsih preparing and running
+        final bool result = await platform.invokeMethod("playStream");  //get the result of the radio running
         if(result == true)
-          _mprunning = false;
+          _mprunning = false; 
       } on PlatformException catch(e){
         print("Stream error: $e");
       }
