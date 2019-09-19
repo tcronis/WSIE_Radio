@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import './network_exception_widget.dart';
 import 'package:http/http.dart' as http;
-
 import 'dart:async';
 import 'dart:convert';
-
-
-
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
 
 class StreamPage extends StatefulWidget{
-
   @override
   State createState() => new __StreamPage();
 }
 
 class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<StreamPage>{
-
-  DateTime selectedDate = DateTime.now();
-  bool playStream = false;
-  Timer _timer; 
-  int timeInterval = 5;
-  static bool _mprunning = false;
+  var formatter = new DateFormat("EEEE, MMMM, d" );     //formatter for displaying the current day/date of the song data being pulled
+  DateTime selectedDate = DateTime.now();               //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
+  bool playStream = false;                              //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
+  Timer _timer;                                         //timer used in to time when to try and grab more album data when current streamin the radio              
+  static bool _mprunning = false;                       //another var that will help prevent user spam, it will track if the media player is actually playing anything after a response form the native OS channel
 
   Future <void> _toggleRadio() async{
     //checking to see if the radio is streaming or if it needs to stop playing
@@ -49,8 +44,6 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     setState(() {});
     _mprunning = false;
   }
-
-
   //Date selection, will open a calendar and will need to be edited to match the fit of the rest of the application
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -58,9 +51,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
+    //checking to see if the user actually selected a new date, if not then nothing will refresh
     if (picked != null && picked != selectedDate)
       setState(() {
-        // print(picked);
         refresh();
         selectedDate = picked;
       });
@@ -72,6 +65,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     // setState((){});
   }
 
+  //method that will refresht the widget/page on command
   refresh(){
     setState((){});
   }
@@ -84,7 +78,6 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   }
 
   String playStopText = "Play";
-
   @override
   Widget build(BuildContext context){
     return Theme(
@@ -116,6 +109,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                           new RaisedButton(
                               child: new Text(playStopText),
                               color: SIUERed,
+                              textColor: Colors.white,
                               elevation: 4.0,
                               splashColor: Colors.white10,
                               onPressed: (){
@@ -141,6 +135,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                           new RaisedButton(
                               child: const Text('Select Date'),
                               color: SIUERed,
+                              textColor: Colors.white,
                               elevation: 4.0,
                               splashColor: Colors.white10,
                               onPressed: (){
@@ -148,6 +143,14 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                               }
                           ),
                         ],
+                      ),
+                    ),
+                    //widget that displays the current date selected to display the song data for
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: new Text(
+                        formatter.format(selectedDate).toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   __songContainer(selectedDate.toString()),
@@ -168,8 +171,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   bool get wantKeepAlive => true;
 }
 
-//write it to refresh after a certian time to que for new album art
+//this will hold the WSIE logo or the album artwork if the user is current streaming
 Widget __imageHold(bool play){
+  //default show the wsie logo
   if(play == false){
     return Image.asset(
       '././assets/WSIE_4CBlackBackground.jpg',
@@ -178,12 +182,11 @@ Widget __imageHold(bool play){
       height: 200,
     );
   }else{
-    // get the most current song played according to the WSIE radio data
-    // Future <Post> data =__getCurrentSong();
     return Container(
       height: 200.0,
       width: 200.0,
       child: FutureBuilder(
+        //this will get the new post, and then attempt to grab the Image to display
         future: (getPost(DateTime.now().toString())),
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.hasData){
@@ -199,6 +202,7 @@ Widget __imageHold(bool play){
                         width: 200,
                       );
                     }else{
+                      //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
                       return Image.asset(
                         '././assets/WSIE_4CBlackBackground.jpg',
                         fit: BoxFit.contain,
@@ -206,8 +210,8 @@ Widget __imageHold(bool play){
                         height: 200,
                       );
                     }
-                    
                   }else{
+                    //if the actual snapshot was emtpy then this will re-display the WSIE logo
                     return Image.asset(
                       '././assets/WSIE_4CBlackBackground.jpg',
                       fit: BoxFit.contain,
@@ -217,8 +221,8 @@ Widget __imageHold(bool play){
                   }
                 },
               );
-            }
-            else{
+            }else{
+              //if the snapshot data is length 0
               return Image.asset(
                 '././assets/WSIE_4CBlackBackground.jpg',
                 fit: BoxFit.contain,
@@ -288,30 +292,59 @@ Widget __imageHold(bool play){
     }
   }
 
-
+//widget that will display all of the song data of the selected date
 Widget __songContainer(String date){
+  String temp = date;
+  //convert the current date to an integer to compare dates
+  int selectedDate = int.parse(temp.substring(0, 4));
+  selectedDate += int.parse(temp.substring(5, 7));
+  selectedDate += int.parse(temp.substring(8, 10));
+
+  int currentDate = int.parse(DateTime.now().toString().substring(0,4));
+  currentDate += int.parse(DateTime.now().toString().substring(5,7));
+  currentDate += int.parse(DateTime.now().toString().substring(8,10));
+
+
+
   return new Expanded(
     child: FutureBuilder(
-      future: getPost(date),
+      future: getPost(date),  //grabbing the date
       builder: (BuildContext context, AsyncSnapshot snapshot){
+        //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
         if(snapshot.hasData){
           if(snapshot.data.length > 0){
             return new ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index){
+                //each card is built with the song, artist name, and the time played
                 return Card(
                   child:Padding(
                     padding:const EdgeInsets.all(15.0),
                     child: 
-                      Text("Title: ${snapshot.data[index].title}\n Artist: ${snapshot.data[index].artist}\n Time Played: ${snapshot.data[index].playtime}"),
+                      Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
                   )
                 );
               },
             );
-          }else{
-            return networkError();
+            // Edit to check to see if the new date is greater than the current, if so then error out telling the user that they selected a date outside the possible range
+          }else if(selectedDate > currentDate){
+            return new ListView.builder(
+              itemCount: 1,
+              itemBuilder: (BuildContext context, int index){
+                return Card(
+                  child:Padding(
+                    padding:const EdgeInsets.all(15.0),
+                    child: 
+                      Text(
+                        "Error, you have selected a date greater than the current date!",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                        textAlign: TextAlign.center,
+                      ),
+                  )
+                );
+              },
+            );
           }
-
         } else{
           return Center(
             child: new CircularProgressIndicator(),
@@ -325,7 +358,7 @@ Widget __songContainer(String date){
 
 
 Future <List<Post>> getPost(String date) async{
-  print(date);
+  // print(date);
   String temp = date.substring(0,4);
   temp += date.substring(5, 7);
   temp += date.substring(8,10);
@@ -349,18 +382,15 @@ Future <List<Post>> getPost(String date) async{
     List<Post> temp = new List<Post>();
     return temp;
   }
-  // print(temp);
 }
 
+//This is the class that will hold a post (or the data from the site) from the SIUE IceCast sever
 class Post{
   final String album;
   final String artist;
   final String timestap;
   final String title;
   final String playtime;
-  // final String appleLink;
-
-
   //constructor
   Post({this.album, this.artist, this.timestap, this.title, this.playtime});
 

@@ -30,6 +30,7 @@ public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "wsie.get.radio/stream";
     private Boolean ready = false;
     private String url = "http://streaming.siue.edu:8000/wsie.mp3";
+    private Boolean stopPlayingFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +43,14 @@ public class MainActivity extends FlutterActivity {
                 @Override
                 public void onMethodCall(MethodCall call, Result result) {
                     boolean initializerForMedia = false;
-                    if (call.method.equals("playStream")) {
+                    if (call.method.equals("playStream") && player == null) {
                         //this will check to make sure that the media player is initialized, else it will fail
                         initializerForMedia = initializeMediaPlayer();
-                        if(initializerForMedia == false)
-                            result.success(false);
-                        else
-                            //Will return true after the steps are complete, so the andriod media player can't be spammed
-                            result.success(startPlaying());
+                        //Will return true after the steps are complete, so the andriod media player can't be spammed
+                        result.success(startPlaying());
                     } else {
                         //Will return true after the steps are complete, so the andriod media player can't be spammed
+                        stopPlayingFlag = true;
                         result.success(stopPlaying());
                     }
                 }
@@ -63,18 +62,29 @@ public class MainActivity extends FlutterActivity {
         player.prepareAsync();
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer mp) {
-                player.start();
+                //this will check to see if the stop playing was pressed during the async of preparing to start, if so then it won't run the mediaplayer
+                if(stopPlayingFlag == true){
+                    player.reset(); 
+                    player.release();
+                    player = null;
+                    stopPlayingFlag = false;
+                }
+                else
+                    player.start();
             }
         });
         return true;
     }
     private boolean stopPlaying() {
         //checking to make sure the player is running, to avoid a bad state call
-        if (player.isPlaying()) {
-            player.stop();
-            player.reset();
-            player.release();
-            player = null;
+        if (player != null) {
+            if(player.isPlaying()){
+                player.stop();
+                player.reset();
+                player.release();
+                player = null;
+                stopPlayingFlag = false;
+            }
         }
         return true;
     }
@@ -85,10 +95,6 @@ public class MainActivity extends FlutterActivity {
         if(Integer.valueOf(android.os.Build.VERSION.SDK) <= 25){
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         }else {
-            player.setAudioAttributes( new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build());
         }
         try {
             player.setDataSource(this, Uri.parse(url));
