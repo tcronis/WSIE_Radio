@@ -303,57 +303,59 @@ Widget __songContainer(String date){
   int currentDate = int.parse(DateTime.now().toString().substring(0,4));
   currentDate += int.parse(DateTime.now().toString().substring(5,7));
   currentDate += int.parse(DateTime.now().toString().substring(8,10));
-
-
-
-  return new Expanded(
-    child: FutureBuilder(
-      future: getPost(date),  //grabbing the date
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
-        if(snapshot.hasData){
-          if(snapshot.data.length > 0){
-            return new ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index){
-                //each card is built with the song, artist name, and the time played
-                return Card(
-                  child:Padding(
-                    padding:const EdgeInsets.all(15.0),
-                    child: 
-                      Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
-                  )
-                );
-              },
-            );
-            // Edit to check to see if the new date is greater than the current, if so then error out telling the user that they selected a date outside the possible range
-          }else if(selectedDate > currentDate){
-            return new ListView.builder(
-              itemCount: 1,
-              itemBuilder: (BuildContext context, int index){
-                return Card(
-                  child:Padding(
-                    padding:const EdgeInsets.all(15.0),
-                    child: 
-                      Text(
-                        "Error, you have selected a date greater than the current date!",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                        textAlign: TextAlign.center,
-                      ),
-                  )
-                );
-              },
-            );
-          }
-        } else{
-          return Center(
-            child: new CircularProgressIndicator(),
+  print(date);
+  if(selectedDate > currentDate){
+    return new Expanded(
+      child: new ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index){
+          return Card(
+            child:Padding(
+              padding:const EdgeInsets.all(15.0),
+              child: 
+                Text(
+                  "Error, you have selected a date greater than the current date!",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+            )
           );
-        }
-      },
-    ),
+        },
+      )
+    );
+  } else{
+      return new Expanded(
+          child: FutureBuilder(
+            future: getPost(date),  //grabbing the date
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
+              if(snapshot.hasData){
+                if(snapshot.data.length > 0){
+                  return new ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index){
+                      //each card is built with the song, artist name, and the time played
+                      return Card(
+                        child:Padding(
+                          padding:const EdgeInsets.all(15.0),
+                          child: 
+                            Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
+                        )
+                      );
+                    },
+                  );
+                }
+              } else{
+                return Center(
+                  child: new CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        );
+  }
 
-  );
+ 
 }
 
 
