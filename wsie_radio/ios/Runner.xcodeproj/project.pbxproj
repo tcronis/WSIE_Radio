@@ -81,7 +81,6 @@
 				31E3AAF36B982B8E87C3AE63 /* Pods-Runner.release.xcconfig */,
 				D34891896639D0725108E0BE /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -193,6 +192,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -318,6 +318,8 @@
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 0;
 		};
 /* End PBXVariantGroup section */
 
