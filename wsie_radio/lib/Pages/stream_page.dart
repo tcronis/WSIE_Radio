@@ -295,17 +295,10 @@ Widget __imageHold(bool play){
 
 //widget that will display all of the song data of the selected date
 Widget __songContainer(String date){
-  String temp = date;
-  //convert the current date to an integer to compare dates
-  int selectedDate = int.parse(temp.substring(0, 4));
-  selectedDate += int.parse(temp.substring(5, 7));
-  selectedDate += int.parse(temp.substring(8, 10));
-  //parse the date down to a number to compare with the selected date from the user
-  int currentDate = int.parse(DateTime.now().toString().substring(0,4));
-  currentDate += int.parse(DateTime.now().toString().substring(5,7));
-  currentDate += int.parse(DateTime.now().toString().substring(8,10));
+  DateTime selectedDate = DateTime.parse(date);
+  DateTime currentDate = DateTime.now();
 
-  if(selectedDate > currentDate){
+  if(selectedDate.isAfter(currentDate)){
     return new Expanded(
       child: new ListView.builder(
         itemCount: 1,
