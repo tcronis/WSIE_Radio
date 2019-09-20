@@ -93,7 +93,7 @@ public class MainActivity extends FlutterActivity {
         boolean success_failure = true;
         player = new MediaPlayer();
         //Checking to see what type of API level the Android device is
-        if(Integer.valueOf(android.os.Build.VERSION.SDK) <= 25){
+        if(Integer.valueOf(android.os.Build.VERSION.SDK) >= 25){
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
                 player.setDataSource(this, Uri.parse(url));
@@ -107,12 +107,10 @@ public class MainActivity extends FlutterActivity {
                 success_failure = false;
                 e.printStackTrace();
             }
-
         }else {
             //this is for if the OS doesn't meet the requirements of API 25, it will just fail
             success_failure = false;
         }
-
         return success_failure;
     }
 }
