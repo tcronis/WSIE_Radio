@@ -7,9 +7,9 @@ Widget headerBar(){
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'WSIE Radio ',
+          'WSIE Radio',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         // Image.asset(

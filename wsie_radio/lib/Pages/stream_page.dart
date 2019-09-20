@@ -177,7 +177,7 @@ Widget __imageHold(bool play){
   //default show the wsie logo
   if(play == false){
     return Image.asset(
-      '././assets/WSIE_4COriginal.jpg',
+      '././assets/WSIE_Logo_Cutout.png',
       fit: BoxFit.contain,
       width: 200,
       height: 200,
@@ -205,7 +205,7 @@ Widget __imageHold(bool play){
                     }else{
                       //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
                       return Image.asset(
-                        '././assets/WSIE_4COriginal.jpg',
+                        '././assets/WSIE_Logo_Cutout.png',
                         fit: BoxFit.contain,
                         width: 200,
                         height: 200,
@@ -214,7 +214,7 @@ Widget __imageHold(bool play){
                   }else{
                     //if the actual snapshot was emtpy then this will re-display the WSIE logo
                     return Image.asset(
-                      '././assets/WSIE_4CBlackBackground.jpg',
+                      '././assets/WSIE_Logo_Cutout.png',
                       fit: BoxFit.contain,
                       width: 200,
                       height: 200,
@@ -225,7 +225,7 @@ Widget __imageHold(bool play){
             }else{
               //if the snapshot data is length 0
               return Image.asset(
-                '././assets/WSIE_4COriginal.jpg',
+                '././assets/WSIE_Logo_Cutout.png',
                 fit: BoxFit.contain,
                 width: 200,
                 height: 200,

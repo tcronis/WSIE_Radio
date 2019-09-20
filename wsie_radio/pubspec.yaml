@@ -58,6 +58,8 @@ flutter:
     - assets/siue_logo.jpg
     - assets/WSIE_4CBlackBackground.jpg
     - assets/WSIE_4COriginal.jpg
+    - SIUE_cutout.png
+    - WSIE_Logo_Cutout.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
