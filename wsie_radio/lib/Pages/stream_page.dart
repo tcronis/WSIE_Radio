@@ -27,7 +27,8 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         _mprunning = true;  //toggle force wait on the radio to finsih preparing and running
         final bool result = await platform.invokeMethod("playStream");  //get the result of the radio running
         if(result == true)
-          _mprunning = false; 
+          _mprunning = false;
+         
       } on PlatformException catch(e){
         print("Stream error: $e");
       }
@@ -122,7 +123,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                       _toggleRadio();
                                       playStopText = "Stop";
                                   }
-                                    //this will stop the state radio and prepare it for the next time that it is pressed play
+                                  //this will stop the state radio and prepare it for the next time that it is pressed play
                                   else{
                                     playStream = false;
                                     playStopText = "Play";
