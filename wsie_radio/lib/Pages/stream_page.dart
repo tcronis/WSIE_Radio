@@ -297,6 +297,7 @@ Widget __imageHold(bool play){
 Widget __songContainer(String date){
   DateTime selectedDate = DateTime.parse(date);
   DateTime currentDate = DateTime.now();
+  int different = currentDate.difference(selectedDate).inDays;
 
   if(selectedDate.isAfter(currentDate)){
     return new Expanded(
@@ -308,7 +309,7 @@ Widget __songContainer(String date){
               padding:const EdgeInsets.all(15.0),
               child: 
                 Text(
-                  "Error, you have selected a date greater than the current date!",
+                  "Error, you have selected a date greater than the current date",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   textAlign: TextAlign.center,
                 ),
@@ -317,7 +318,27 @@ Widget __songContainer(String date){
         },
       )
     );
-  } else{
+  } else if(different > 30){
+    return new Expanded(
+      child: new ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index){
+          return Card(
+            child:Padding(
+              padding:const EdgeInsets.all(15.0),
+              child: 
+                Text(
+                  "Error, you have selected a date older than 30 days",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+            )
+          );
+        },
+      )
+    );
+  } 
+  else{
       return new Expanded(
           child: FutureBuilder(
             future: getPost(date),  //grabbing the date
