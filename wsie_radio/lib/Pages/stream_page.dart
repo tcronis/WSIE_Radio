@@ -34,8 +34,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       }
     }else{
       try{
+        //toggle wait on the button for a response form the native OS channel
         _mprunning = true;
-        final bool result = await platform.invokeMethod("stopStream");
+        final bool result = await platform.invokeMethod("stopStream");  //recieve a response from the channel
         if(result == true)
           _mprunning = false;
       }on PlatformException catch(e){
