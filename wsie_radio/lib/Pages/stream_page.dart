@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
+Post cachedPost = null;
 
 class StreamPage extends StatefulWidget{
   @override
@@ -34,8 +36,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       }
     }else{
       try{
+        //toggle wait on the button for a response form the native OS channel
         _mprunning = true;
-        final bool result = await platform.invokeMethod("stopStream");
+        final bool result = await platform.invokeMethod("stopStream");  //recieve a response from the channel
         if(result == true)
           _mprunning = false;
       }on PlatformException catch(e){
@@ -183,6 +186,7 @@ Widget __imageHold(bool play){
       height: 200,
     );
   }else{
+    //checked the cached song to see if it is the same as the current song to prevent repeated calls for the same image
     return Container(
       height: 200.0,
       width: 200.0,
@@ -197,11 +201,22 @@ Widget __imageHold(bool play){
                 builder: (BuildContext context2, AsyncSnapshot snapshot2){
                   if(snapshot2.hasData){
                     if(snapshot2.data !=null){
-                      return Image.network(
-                        '${snapshot2.data}',
+                      // print("Second snapshot: " + snapshot2.data);
+                      // print("First snapshot: " + snapshot.data[0].timestap.toString());
+                      return CachedNetworkImage(
+                        placeholder: (context, url) => Image.asset(
+                          '././assets/WSIE_4CBlackBackground.jpg'
+                        ),
+                        errorWidget: (context, url, error) => new Icon(Icons.error),
+                        imageUrl: '${snapshot2.data}',
                         height: 200,
                         width: 200,
                       );
+                      // return Image.network(
+                      //   '${snapshot2.data}',
+                      //   height: 200,
+                      //   width: 200,
+                      // );
                     }else{
                       //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
                       return Image.asset(
@@ -375,7 +390,6 @@ Widget __songContainer(String date){
 
 
 Future <List<Post>> getPost(String date) async{
-  // print(date);
   String temp = date.substring(0,4);
   temp += date.substring(5, 7);
   temp += date.substring(8,10);
