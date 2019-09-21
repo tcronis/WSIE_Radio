@@ -7,15 +7,15 @@ Widget headerBar(){
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'WSIE Radio ',
+          'WSIE Radio',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
-        Image.asset(
-          'assets/WSIE_4CBlackBackground.jpg',
-          fit: BoxFit.contain,
-        ),
+        // Image.asset(
+        //   'assets/WSIE_4CBlackBackground.jpg',
+        //   fit: BoxFit.contain,
+        // ),
       ],
     ),
     backgroundColor: SIUERed,

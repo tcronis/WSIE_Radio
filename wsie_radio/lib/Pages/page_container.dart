@@ -3,7 +3,11 @@ import 'package:page_indicator/page_indicator.dart';
 
 import 'header_bar.dart';
 import 'stream_page.dart';
-// import 'streampage.dart';
+//
+import 'header_bar.dart';
+import 'calendar_page.dart';
+import 'email_donations_page.dart';
+import 'facebook_page.dart';
 
 
 const SIUERed = const Color(0xFFe41c24);
@@ -40,8 +44,14 @@ class __PageHolder extends State<PageHolder>{
             pageView: PageView(
               children: <Widget>[
                 StreamPage(),
-                Text("Test Page 2"),
-                Text("Test Page 3"),
+                FacebookFeed(),
+                Calendar(),
+                EmailAndDonations(),
+
+                
+                //Insert all of your page widgets here
+
+
               ],
               controller: controller,
             ),

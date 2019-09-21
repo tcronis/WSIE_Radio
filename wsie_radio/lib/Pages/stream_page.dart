@@ -177,7 +177,7 @@ Widget __imageHold(bool play){
   //default show the wsie logo
   if(play == false){
     return Image.asset(
-      '././assets/WSIE_4CBlackBackground.jpg',
+      '././assets/WSIE_Logo_Cutout.png',
       fit: BoxFit.contain,
       width: 200,
       height: 200,
@@ -205,7 +205,7 @@ Widget __imageHold(bool play){
                     }else{
                       //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
                       return Image.asset(
-                        '././assets/WSIE_4CBlackBackground.jpg',
+                        '././assets/WSIE_Logo_Cutout.png',
                         fit: BoxFit.contain,
                         width: 200,
                         height: 200,
@@ -214,7 +214,7 @@ Widget __imageHold(bool play){
                   }else{
                     //if the actual snapshot was emtpy then this will re-display the WSIE logo
                     return Image.asset(
-                      '././assets/WSIE_4CBlackBackground.jpg',
+                      '././assets/WSIE_Logo_Cutout.png',
                       fit: BoxFit.contain,
                       width: 200,
                       height: 200,
@@ -225,7 +225,7 @@ Widget __imageHold(bool play){
             }else{
               //if the snapshot data is length 0
               return Image.asset(
-                '././assets/WSIE_4CBlackBackground.jpg',
+                '././assets/WSIE_Logo_Cutout.png',
                 fit: BoxFit.contain,
                 width: 200,
                 height: 200,
@@ -295,17 +295,11 @@ Widget __imageHold(bool play){
 
 //widget that will display all of the song data of the selected date
 Widget __songContainer(String date){
-  String temp = date;
-  //convert the current date to an integer to compare dates
-  int selectedDate = int.parse(temp.substring(0, 4));
-  selectedDate += int.parse(temp.substring(5, 7));
-  selectedDate += int.parse(temp.substring(8, 10));
-  //parse the date down to a number to compare with the selected date from the user
-  int currentDate = int.parse(DateTime.now().toString().substring(0,4));
-  currentDate += int.parse(DateTime.now().toString().substring(5,7));
-  currentDate += int.parse(DateTime.now().toString().substring(8,10));
+  DateTime selectedDate = DateTime.parse(date);
+  DateTime currentDate = DateTime.now();
+  int different = currentDate.difference(selectedDate).inDays;
 
-  if(selectedDate > currentDate){
+  if(selectedDate.isAfter(currentDate)){
     return new Expanded(
       child: new ListView.builder(
         itemCount: 1,
@@ -315,7 +309,7 @@ Widget __songContainer(String date){
               padding:const EdgeInsets.all(15.0),
               child: 
                 Text(
-                  "Error, you have selected a date greater than the current date!",
+                  "Error, you have selected a date greater than the current date",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   textAlign: TextAlign.center,
                 ),
@@ -324,7 +318,27 @@ Widget __songContainer(String date){
         },
       )
     );
-  } else{
+  } else if(different > 30){
+    return new Expanded(
+      child: new ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index){
+          return Card(
+            child:Padding(
+              padding:const EdgeInsets.all(15.0),
+              child: 
+                Text(
+                  "Error, you have selected a date older than 30 days",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+            )
+          );
+        },
+      )
+    );
+  } 
+  else{
       return new Expanded(
           child: FutureBuilder(
             future: getPost(date),  //grabbing the date
