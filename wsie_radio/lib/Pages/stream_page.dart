@@ -205,7 +205,7 @@ Widget __imageHold(bool play){
                       // print("First snapshot: " + snapshot.data[0].timestap.toString());
                       return CachedNetworkImage(
                         placeholder: (context, url) => Image.asset(
-                          '././assets/WSIE_4CBlackBackground.jpg'
+                          '././assets/WSIE_Logo_Cutout.png'
                         ),
                         errorWidget: (context, url, error) => new Icon(Icons.error),
                         imageUrl: '${snapshot2.data}',
