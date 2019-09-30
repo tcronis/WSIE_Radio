@@ -5,8 +5,33 @@ class EmailAndDonations extends StatefulWidget{
   State createState() => new __EmailAndDonations();
 }
 class __EmailAndDonations extends State<EmailAndDonations>{
-  
-   @override
+
+  final emailController = TextEditingController();
+  final messageController = TextEditingController();
+  final nameController = TextEditingController();
+  bool checkVal = false;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    messageController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
+
+  void _sendEmailMessage() async {
+    String email = emailController.text;
+    String message = messageController.text;
+    String name = nameController.text;
+    String checkboxVal = checkVal.toString();
+
+    print('Name: $name with Email: $email with Message: $message List?: $checkboxVal');
+    //emailController.dispose();
+    //messageController.dispose();
+  }
+
+    @override
   Widget build(BuildContext context){
     return MaterialApp(
       color: Colors.white,
@@ -19,7 +44,7 @@ class __EmailAndDonations extends State<EmailAndDonations>{
               return Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 20.0),
+                    padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 15.0),
                     child: Text(
                       'Song Requests and More Information:',
                       textAlign: TextAlign.center,
@@ -31,7 +56,7 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                   new Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 5, 15, 20),
+                        padding: const EdgeInsets.fromLTRB(20, 5, 10, 20),
                         child: Container(
                           child: new Text("From: ",
                             style: TextStyle(
@@ -44,14 +69,15 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                         child: SizedBox(
                           height: 75.0,
-                          width: 300.0,
+                          width: (MediaQuery.of(context).size.width)*0.71,
                           child: TextFormField(
+                            controller: nameController,
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: "Email",
+                              labelText: "Name",
                             ),
                             maxLines: 1,
                           ),
@@ -59,13 +85,15 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                       ),
                     ],
                   ),
+
               Padding(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.fromLTRB(20, 5, 15, 10),
                 child: SizedBox(
                   height: 80.0,
-                  width: 375.0,
+                  width: (MediaQuery.of(context).size.width)*0.87,
                   child: TextFormField(
-                    autofocus: true,
+                    controller: messageController,
+                    //autofocus: true,
                     onEditingComplete: deactivate,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -78,17 +106,55 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                   new Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 50, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(20, 6, 10, 0),
                         child: Container(
-                          child: new Checkbox(
-                            value: true,
+                          child: new Text("Email: ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0
+                            ),
                           ),
                           alignment: FractionalOffset(.06,.05),
                         ),
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 50, 20, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 9, 0, 0),
+                        child: SizedBox(
+                          height: 60.0,
+                          width: (MediaQuery.of(context).size.width)*0.71,
+                          child: TextFormField(
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Email",
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  new Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 18, 0, 0),
+                        child: Container(
+                          child: new Checkbox(
+                            value: checkVal,
+                            onChanged: (bool value){
+                              setState(() {
+                                checkVal = value;
+                              });
+                            }
+                          ),
+                          alignment: FractionalOffset(.06,.05),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: Container(
                           child: new Text("Register for WSIE Emailing List",
                             style: TextStyle(
@@ -100,8 +166,9 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 50, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(12, 20, 0, 0),
                         child: RaisedButton(
+                          onPressed: _sendEmailMessage,
                           child: Text(
                             'Send',
                             style: TextStyle(
@@ -131,7 +198,7 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: new SizedBox(
-                      height: 20,
+                      height: 25,
                       width:  375,
                       child: Text(
                         'Logo - Underwriter 1: Link to Website/Info',
@@ -146,7 +213,7 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: new SizedBox(
-                      height: 20,
+                      height: 25,
                       width:  375,
                       child: Text(
                         'Logo - Underwriter 2: Link to Website/Info',
@@ -162,7 +229,7 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: new SizedBox(
-                      height: 20,
+                      height: 25,
                       width:  375,
                       child: Text(
                         'Logo - Underwriter 3: Link to Website/Info',
