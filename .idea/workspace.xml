@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3956d8b8-6e32-4384-b14b-10475206501d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/WSIE_Rasio.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WSIE_Rasio.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wsie_radio/android/app/src/main/java/com/example/wsie_radio/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/android/app/src/main/java/com/example/wsie_radio/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wsie_radio/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/pubspec.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -12,51 +14,80 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-862129534">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="4" />
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.14" value="1" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="4" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="dart" value="3" />
-          <entry key="gradle" value="4" />
-          <entry key="gradlew" value="1" />
-          <entry key="java" value="1" />
-          <entry key="properties" value="1" />
-          <entry key="yaml" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Dart" value="3" />
-          <entry key="Groovy" value="4" />
-          <entry key="JAVA" value="1" />
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Properties" value="1" />
-          <entry key="YAML" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="gradle" value="8" />
-          <entry key="java" value="281" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Groovy" value="8" />
-          <entry key="JAVA" value="281" />
-        </counts>
-      </usages-collector>
-    </session>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RF8M43DNQVA" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" column="59" lean-forward="true" selection-start-line="15" selection-start-column="59" selection-end-line="15" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/lib/main.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="35">
+              <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/android/app/src/main/java/com/example/wsie_radio/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="106">
+              <caret line="28" column="34" lean-forward="true" selection-start-line="28" selection-start-column="34" selection-end-line="28" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#startPlaying#0;class#MainActivity#0" />
+                <element signature="method#stopPlaying#0;class#MainActivity#0" />
+                <element signature="method#initializeMediaPlayer#0;class#MainActivity#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>getPost</find>
+      <find>stream</find>
+      <find>start</find>
+      <find>methodchannel</find>
+      <find>method</find>
+      <find>platform</find>
+      <find>CHANNEL</find>
+      <find>Oncreate</find>
+    </findStrings>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -105,6 +136,28 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Develop" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/wsie_radio/lib/Pages/test.dart" />
+        <option value="$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart" />
+        <option value="$PROJECT_DIR$/wsie_radio/android/app/src/main/java/com/example/wsie_radio/MainActivity.java" />
+        <option value="$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" />
+      </list>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -116,10 +169,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="y" value="-10" />
-    <option name="width" value="1940" />
-    <option name="height" value="1050" />
+    <option name="x" value="201" />
+    <option name="y" value="101" />
+    <option name="width" value="697" />
+    <option name="height" value="735" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -132,68 +185,57 @@
         <subPane>
           <expand>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
-              <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
@@ -201,11 +243,10 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
@@ -214,34 +255,59 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="example" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
+              <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="example" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="WSIE_Rasio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Rasio" type="462c0819:PsiDirectoryNode" />
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
               <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
               <item name="Pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
+              <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/../../flutter" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../flutter" />
-    <property name="settings.editor.selected.configurable" value="vcs.Mercurial" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/flutter_windows_v1.0.0-stable" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="flutter packages get" />
+      <command value="flutter clean" />
+    </option>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -255,24 +321,11 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Flutter.WSIE_Rasio">
-    <configuration name="main.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/wsie_radio/lib/main.dart" />
-      <option name="workingDirectory" value="$PROJECT_DIR$/wsie_radio" />
-      <method v="2" />
-    </configuration>
-    <configuration name="WSIE_Rasio" type="FlutterRunConfigurationType" factoryName="Flutter">
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter" singleton="false">
       <option name="filePath" value="$PROJECT_DIR$/wsie_radio/lib/main.dart" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/wsie_radio/lib/main.dart" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Dart Command Line App.main.dart" />
-      <item itemvalue="Flutter.WSIE_Rasio" />
-    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -288,32 +341,162 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Captures" order="0" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.2147651" />
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.2708018" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="0" weight="0.32907802" />
+      <window_info id="Resources Explorer" order="7" />
+      <window_info id="Build Variants" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="0" weight="0.400982" />
       <window_info anchor="bottom" id="TODO" order="1" />
-      <window_info anchor="bottom" id="Debug" order="2" weight="0.05106383" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.8780142" />
-      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.50075644" side_tool="true" weight="0.3289689" />
       <window_info anchor="bottom" id="Flutter Performance" order="5" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="6" />
-      <window_info anchor="bottom" id="Dart Analysis" order="7" weight="0.32907802" />
+      <window_info anchor="bottom" id="Version Control" order="6" weight="0.3289689" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.49924356" weight="0.3289689" />
+      <window_info anchor="bottom" id="Logcat" order="8" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
       <window_info anchor="right" id="Theme Preview" order="1" />
-      <window_info anchor="right" id="Flutter Inspector" order="2" visible="true" weight="0.110738255" />
-      <window_info anchor="right" id="Flutter Outline" order="3" />
+      <window_info anchor="right" id="Flutter Inspector" order="2" weight="0.3290469" />
+      <window_info anchor="right" id="Flutter Outline" order="3" weight="0.3290469" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
+      <window_info anchor="right" id="Device File Explorer" order="5" side_tool="true" weight="0.3293011" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2708018" />
+      <window_info id="Structure" order="2" side_tool="true" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info id="Resources Explorer" order="7" />
+      <window_info id="Build Variants" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="0" visible="true" weight="0.400982" />
+      <window_info anchor="bottom" id="TODO" order="1" />
+      <window_info anchor="bottom" id="Debug" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.50075644" side_tool="true" weight="0.3289689" />
+      <window_info anchor="bottom" id="Flutter Performance" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="6" weight="0.3289689" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.49924356" weight="0.3289689" />
+      <window_info anchor="bottom" id="Logcat" order="8" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="right" id="Theme Preview" order="1" />
+      <window_info anchor="right" id="Flutter Inspector" order="2" weight="0.3290469" />
+      <window_info anchor="right" id="Flutter Outline" order="3" weight="0.3290469" />
+      <window_info anchor="right" id="Palette&#9;" order="4" />
+      <window_info anchor="right" id="Device File Explorer" order="5" side_tool="true" weight="0.3293011" />
+    </layout-to-restore>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/date_event_card.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/calendar_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/network_exception_widget.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/page_container.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/splash_screen.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/date_info.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/facebook_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/header_bar.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/test.dart">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/flutter_windows_v1.0.0-stable/flutter/packages/flutter/lib/src/widgets/framework.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1208" column="7" selection-start-line="1208" selection-start-column="7" selection-end-line="1208" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="35">
+          <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/android/app/src/main/java/com/example/wsie_radio/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="28" column="34" lean-forward="true" selection-start-line="28" selection-start-column="34" selection-end-line="28" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#startPlaying#0;class#MainActivity#0" />
+            <element signature="method#stopPlaying#0;class#MainActivity#0" />
+            <element signature="method#initializeMediaPlayer#0;class#MainActivity#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="59" lean-forward="true" selection-start-line="15" selection-start-column="59" selection-end-line="15" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
