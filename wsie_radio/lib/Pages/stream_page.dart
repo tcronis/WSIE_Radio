@@ -20,34 +20,22 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   DateTime selectedDate = DateTime.now();               //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
   bool playStream = false;                              //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
   Timer _timer;                                         //timer used in to time when to try and grab more album data when current streamin the radio              
-  static bool _mprunning = false;                       //another var that will help prevent user spam, it will track if the media player is actually playing anything after a response form the native OS channel
-
   Future <void> _toggleRadio() async{
     //checking to see if the radio is streaming or if it needs to stop playing
     if(playStream == true){
       try{
-        // _mprunning = true;  //toggle force wait on the radio to finsih preparing and running
         final bool result = await platform.invokeMethod("playStream");  //get the result of the radio running
-        // print(result);
-        // if(result == true)
-        //   _mprunning = false;
-         
       } on PlatformException catch(e){
         print("Stream error: $e");
       }
     }else{
       try{
-        //toggle wait on the button for a response form the native OS channel
-        // _mprunning = true;
         final bool result = await platform.invokeMethod("stopStream");  //recieve a response from the channel
-        // if(result == true)
-        //   _mprunning = false;
       }on PlatformException catch(e){
         print("Stream error: $e");
       }
     }
     setState(() {});
-    _mprunning = false;
   }
   //Date selection, will open a calendar and will need to be edited to match the fit of the rest of the application
   Future<Null> _selectDate(BuildContext context) async {
@@ -82,7 +70,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     }
   }
 
-  String playStopText = "Play";
+  String playStopText = "Play Live Radio";
   @override
   Widget build(BuildContext context){
     return Theme(
@@ -118,22 +106,20 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                               elevation: 4.0,
                               splashColor: Colors.white10,
                               onPressed: (){
-                                if(_mprunning == false){
-                                  //Two different blocks for playing and stopping the radio
-                                    //this will build the play data and grab the album artwork if at all possible
-                                  if(playStopText == "Play"){
-                                      __buildImage(context);
-                                      refreshTimer();
-                                      _toggleRadio();
-                                      playStopText = "Stop";
-                                  }
-                                  //this will stop the state radio and prepare it for the next time that it is pressed play
-                                  else{
-                                    playStream = false;
-                                    playStopText = "Play";
+                                //Two different blocks for playing and stopping the radio
+                                //this will build the play data and grFab the album artwork if at all possible
+                                if(playStopText == "Play Live Radio"){
+                                    __buildImage(context);
+                                    refreshTimer();
                                     _toggleRadio();
-                                    refresh();
-                                  }
+                                    playStopText = "Stop Live Radio";
+                                }
+                                //this will stop the state radio and prepare it for the next time that it is pressed play
+                                else{
+                                  playStream = false;
+                                  playStopText = "Play Live Radio";
+                                  _toggleRadio();
+                                  refresh();
                                 }
                               }
                           ),
@@ -312,9 +298,9 @@ Widget __imageHold(bool play){
 //widget that will display all of the song data of the selected date
 Widget __songContainer(String date){
   DateTime selectedDate = DateTime.parse(date);
-  DateTime currentDate = DateTime.now();
-  int different = currentDate.difference(selectedDate).inDays;
-
+  DateTime currentDate = DateTime.now();                    
+  int different = currentDate.difference(selectedDate).inDays;  //difference between the selected date and the current date
+  //checking to see if the selected date is after the current date, as in it hasn't occurred yet
   if(selectedDate.isAfter(currentDate)){
     return new Expanded(
       child: new ListView.builder(
@@ -334,7 +320,7 @@ Widget __songContainer(String date){
         },
       )
     );
-  } else if(different > 30){
+  } else if(different > 30){  //checking to see if the selected date is older than 30 days of the current date, if so we can't display that info
     return new Expanded(
       child: new ListView.builder(
         itemCount: 1,
@@ -375,8 +361,12 @@ Widget __songContainer(String date){
                       );
                     },
                   );
+                }else{
+                  return Center(
+                    child: new CircularProgressIndicator(),
+                  );
                 }
-              } else{
+              }else{
                 return Center(
                   child: new CircularProgressIndicator(),
                 );
@@ -385,8 +375,6 @@ Widget __songContainer(String date){
           ),
         );
   }
-
- 
 }
 
 
