@@ -26,10 +26,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     //checking to see if the radio is streaming or if it needs to stop playing
     if(playStream == true){
       try{
-        _mprunning = true;  //toggle force wait on the radio to finsih preparing and running
+        // _mprunning = true;  //toggle force wait on the radio to finsih preparing and running
         final bool result = await platform.invokeMethod("playStream");  //get the result of the radio running
-        if(result == true)
-          _mprunning = false;
+        // print(result);
+        // if(result == true)
+        //   _mprunning = false;
          
       } on PlatformException catch(e){
         print("Stream error: $e");
@@ -37,10 +38,10 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     }else{
       try{
         //toggle wait on the button for a response form the native OS channel
-        _mprunning = true;
+        // _mprunning = true;
         final bool result = await platform.invokeMethod("stopStream");  //recieve a response from the channel
-        if(result == true)
-          _mprunning = false;
+        // if(result == true)
+        //   _mprunning = false;
       }on PlatformException catch(e){
         print("Stream error: $e");
       }
