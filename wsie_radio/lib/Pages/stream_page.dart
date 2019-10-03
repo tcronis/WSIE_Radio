@@ -15,11 +15,15 @@ class StreamPage extends StatefulWidget{
   State createState() => new __StreamPage();
 }
 
+
 class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<StreamPage>{
+             
   var formatter = new DateFormat("EEEE, MMMM, d" );     //formatter for displaying the current day/date of the song data being pulled
   DateTime selectedDate = DateTime.now();               //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
   bool playStream = false;                              //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
   Timer _timer;                                         //timer used in to time when to try and grab more album data when current streamin the radio              
+  
+  
   Future <void> _toggleRadio() async{
     //checking to see if the radio is streaming or if it needs to stop playing
     if(playStream == true){
@@ -63,11 +67,10 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     setState((){});
   }
   
+  
   //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
-    if(playStream == true){
-      _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer) => setState(() {}));
-    }
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer _timer) => setState(() {}));
   }
 
   String playStopText = "Play Live Radio";
@@ -110,7 +113,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                 //this will build the play data and grFab the album artwork if at all possible
                                 if(playStopText == "Play Live Radio"){
                                     __buildImage(context);
-                                    refreshTimer();
+                                    refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
                                     _toggleRadio();
                                     playStopText = "Stop Live Radio";
                                 }
@@ -188,8 +191,6 @@ Widget __imageHold(bool play){
                 builder: (BuildContext context2, AsyncSnapshot snapshot2){
                   if(snapshot2.hasData){
                     if(snapshot2.data !=null){
-                      // print("Second snapshot: " + snapshot2.data);
-                      // print("First snapshot: " + snapshot.data[0].timestap.toString());
                       return CachedNetworkImage(
                         placeholder: (context, url) => Image.asset(
                           '././assets/WSIE_Logo_Cutout.png'
@@ -199,11 +200,6 @@ Widget __imageHold(bool play){
                         height: 200,
                         width: 200,
                       );
-                      // return Image.network(
-                      //   '${snapshot2.data}',
-                      //   height: 200,
-                      //   width: 200,
-                      // );
                     }else{
                       //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
                       return Image.asset(
@@ -362,6 +358,7 @@ Widget __songContainer(String date){
                     },
                   );
                 }else{
+                  lostConnection = true;
                   return Center(
                     child: new CircularProgressIndicator(),
                   );

@@ -35,7 +35,7 @@ class __FacebookFeed extends State<FacebookFeed> {
     // int height = MediaQuery.of(context).size.height.roundToDouble().toInt();
     return new Container(
       child: WebView(
-          initialUrl: "https://www.facebook.com/WSIE887theSound/",
+          initialUrl: "https://m.facebook.com/WSIE887theSound/",
           //initialUrl: "https://www.youtube.com",
           javascriptMode: JavascriptMode.unrestricted,
           debuggingEnabled: true,   
