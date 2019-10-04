@@ -168,121 +168,121 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     // );
   }
 
-RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
 
-//widget that will display all of the song data of the selected date
-Widget __songContainer(String date){
-  DateTime selectedDate = DateTime.parse(date);
-  DateTime currentDate = DateTime.now();                    
-  int different = currentDate.difference(selectedDate).inDays;  //difference between the selected date and the current date
-  //checking to see if the selected date is after the current date, as in it hasn't occurred yet
-  if(selectedDate.isAfter(currentDate)){
-    return new Expanded(
-      child: new ListView.builder(
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index){
-          return Card(
-            child:Padding(
-              padding:const EdgeInsets.all(15.0),
-              child: 
-                Text(
-                  "Error, you have selected a date greater than the current date",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  textAlign: TextAlign.center,
-                ),
-            )
-          );
-        },
-      )
-    );
-  } else if(different > 30){  //checking to see if the selected date is older than 30 days of the current date, if so we can't display that info
-    return new Expanded(
-      child: new ListView.builder(
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index){
-          return Card(
-            child:Padding(
-              padding:const EdgeInsets.all(15.0),
-              child: 
-                Text(
-                  "Error, you have selected a date older than 30 days",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  textAlign: TextAlign.center,
-                ),
-            )
-          );
-        },
-      )
-    );
-  } 
-  else{
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  //widget that will display all of the song data of the selected date
+  Widget __songContainer(String date){
+    DateTime selectedDate = DateTime.parse(date);
+    DateTime currentDate = DateTime.now();                    
+    int different = currentDate.difference(selectedDate).inDays;  //difference between the selected date and the current date
+    //checking to see if the selected date is after the current date, as in it hasn't occurred yet
+    if(selectedDate.isAfter(currentDate)){
       return new Expanded(
-          child: FutureBuilder(
-            future: getPost(date),  //grabbing the date
-            builder: (BuildContext context, AsyncSnapshot snapshot){
-              //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
-              if(snapshot.hasData){
-                if(snapshot.data.length > 0){
-                  return new SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    controller: _refreshController,
-                    onRefresh: () async{
-                      await Future.delayed(Duration(seconds: 1));
-                      _refreshController.refreshCompleted();
-                      refresh();
-                    },
-                    onLoading: () async{
-                      await Future.delayed(Duration(seconds: 1));
-                      _refreshController.loadComplete();
-                    },
-                    child: new ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index){
-                        //each card is built with the song, artist name, and the time played
-                        return Card(
-                          child:Padding(
-                            padding:const EdgeInsets.all(15.0),
-                            child: 
-                              Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
-                          )
-                        );
+        child: new ListView.builder(
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index){
+            return Card(
+              child:Padding(
+                padding:const EdgeInsets.all(15.0),
+                child: 
+                  Text(
+                    "Error, you have selected a date greater than the current date",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    textAlign: TextAlign.center,
+                  ),
+              )
+            );
+          },
+        )
+      );
+    } else if(different > 30){  //checking to see if the selected date is older than 30 days of the current date, if so we can't display that info
+      return new Expanded(
+        child: new ListView.builder(
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index){
+            return Card(
+              child:Padding(
+                padding:const EdgeInsets.all(15.0),
+                child: 
+                  Text(
+                    "Error, you have selected a date older than 30 days",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    textAlign: TextAlign.center,
+                  ),
+              )
+            );
+          },
+        )
+      );
+    } 
+    else{
+        return new Expanded(
+            child: FutureBuilder(
+              future: getPost(date),  //grabbing the date
+              builder: (BuildContext context, AsyncSnapshot snapshot){
+                //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
+                if(snapshot.hasData){
+                  if(snapshot.data.length > 0){
+                    return new SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      controller: _refreshController,
+                      onRefresh: () async{
+                        await Future.delayed(Duration(seconds: 1));
+                        _refreshController.refreshCompleted();
+                        refresh();
                       },
-                    ),
-                  );
+                      onLoading: () async{
+                        await Future.delayed(Duration(seconds: 1));
+                        _refreshController.loadComplete();
+                      },
+                      child: new ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index){
+                          //each card is built with the song, artist name, and the time played
+                          return Card(
+                            child:Padding(
+                              padding:const EdgeInsets.all(15.0),
+                              child: 
+                                Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
+                            )
+                          );
+                        },
+                      ),
+                    );
+                  }else{
+                    return new SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      controller: _refreshController,
+                      onRefresh: () async{
+                        await Future.delayed(Duration(seconds: 1));
+                        _refreshController.refreshCompleted();
+                        refresh();
+                      },
+                      onLoading: () async{
+                        await Future.delayed(Duration(seconds: 1));
+                        _refreshController.loadComplete();
+                      },
+                      child: ListView(
+                        children: <Widget>[
+                          Card(
+                            child: networkError(),
+                          )
+                        ],
+                      )
+                    );
+                  }
                 }else{
-                  return new SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    controller: _refreshController,
-                    onRefresh: () async{
-                      await Future.delayed(Duration(seconds: 1));
-                      _refreshController.refreshCompleted();
-                      refresh();
-                    },
-                    onLoading: () async{
-                      await Future.delayed(Duration(seconds: 1));
-                      _refreshController.loadComplete();
-                    },
-                    child: ListView(
-                      children: <Widget>[
-                        Card(
-                          child: networkError(),
-                        )
-                      ],
-                    )
+                  return Center(
+                    child: new CircularProgressIndicator(),
                   );
                 }
-              }else{
-                return Center(
-                  child: new CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        );
-  }
+              },
+            ),
+          );
+    }
 }
 
 
@@ -367,52 +367,52 @@ Widget __imageHold(bool play){
 }
 
 
-  // API call to grab the album data, currently uses the iTune web API for building the album data
-  Future<String> __getAlbumURL(Post data) async{
-    String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
-    final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
-    if(response.statusCode == 200){
-      final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
-      if(jsonResponse['resultCount'] > 0){
-        int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
-        int best = -1;
-        int location = -1;
-        //if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
-          //based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE
-        if(numResults > 0){
-          for(int i=0; i < numResults; i++){
-            int count = -1;  
-            if(data.artist.toUpperCase() == jsonResponse['results'][i]['artistName'].toString().toUpperCase())
-              count++;
-            if(data.album.toLowerCase() == jsonResponse['results'][i]['trackName'].toString().toUpperCase())
-              count++;
-            //if the track name and artist name both match and it is higher or equal to the best count (which keeps track of the best option) then it will become the best option
-            if(count >= best){
-              best = count; //setting as the new best
-              location = i; //setting the location of the new best in the array
-            }
+// API call to grab the album data, currently uses the iTune web API for building the album data
+Future<String> __getAlbumURL(Post data) async{
+  String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
+  final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
+  if(response.statusCode == 200){
+    final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
+    if(jsonResponse['resultCount'] > 0){
+      int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
+      int best = -1;
+      int location = -1;
+      //if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
+        //based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE
+      if(numResults > 0){
+        for(int i=0; i < numResults; i++){
+          int count = -1;  
+          if(data.artist.toUpperCase() == jsonResponse['results'][i]['artistName'].toString().toUpperCase())
+            count++;
+          if(data.album.toLowerCase() == jsonResponse['results'][i]['trackName'].toString().toUpperCase())
+            count++;
+          //if the track name and artist name both match and it is higher or equal to the best count (which keeps track of the best option) then it will become the best option
+          if(count >= best){
+            best = count; //setting as the new best
+            location = i; //setting the location of the new best in the array
           }
-          //if sometype of matching artist name or track name was found then it will store it will display it's url
-          if(location != -1){
-            //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
-            String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
-            int pos = resultURL.indexOf('source') + 7;
-            String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
-            return finalUrl;
-          }
-          //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
-          else
-            return null;
-
         }
+        //if sometype of matching artist name or track name was found then it will store it will display it's url
+        if(location != -1){
+          //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
+          String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
+          int pos = resultURL.indexOf('source') + 7;
+          String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
+          return finalUrl;
+        }
+        //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
         else
           return null;
+
       }
-    }
-    else {
-      print("response code of bad http call: $response.statusCode");
+      else
+        return null;
     }
   }
+  else {
+    print("response code of bad http call: $response.statusCode");
+  }
+}
 
 
 
