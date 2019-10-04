@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './network_exception_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -9,44 +10,38 @@ import 'dart:convert';
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
 Post cachedPost = null;
+bool lostConnectionFlag = false;
 
 class StreamPage extends StatefulWidget{
   @override
   State createState() => new __StreamPage();
 }
 
+
 class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<StreamPage>{
+             
   var formatter = new DateFormat("EEEE, MMMM, d" );     //formatter for displaying the current day/date of the song data being pulled
   DateTime selectedDate = DateTime.now();               //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
   bool playStream = false;                              //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
   Timer _timer;                                         //timer used in to time when to try and grab more album data when current streamin the radio              
-  static bool _mprunning = false;                       //another var that will help prevent user spam, it will track if the media player is actually playing anything after a response form the native OS channel
-
+  
+  
   Future <void> _toggleRadio() async{
     //checking to see if the radio is streaming or if it needs to stop playing
     if(playStream == true){
       try{
-        _mprunning = true;  //toggle force wait on the radio to finsih preparing and running
         final bool result = await platform.invokeMethod("playStream");  //get the result of the radio running
-        if(result == true)
-          _mprunning = false;
-         
       } on PlatformException catch(e){
         print("Stream error: $e");
       }
     }else{
       try{
-        //toggle wait on the button for a response form the native OS channel
-        _mprunning = true;
         final bool result = await platform.invokeMethod("stopStream");  //recieve a response from the channel
-        if(result == true)
-          _mprunning = false;
       }on PlatformException catch(e){
         print("Stream error: $e");
       }
     }
     setState(() {});
-    _mprunning = false;
   }
   //Date selection, will open a calendar and will need to be edited to match the fit of the rest of the application
   Future<Null> _selectDate(BuildContext context) async {
@@ -74,14 +69,16 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     setState((){});
   }
   
+  
+  
   //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
-    if(playStream == true){
-      _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer) => setState(() {}));
-    }
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer _timer) => setState(() {}));
   }
 
-  String playStopText = "Play";
+  
+
+  String playStopText = "Play Live Radio";
   @override
   Widget build(BuildContext context){
     return Theme(
@@ -98,8 +95,6 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
             color: Colors.white,
             home: Scaffold(
               body: new Container(
-                // padding: new EdgeInsets.all(2.5),
-                // child: __center(),
                 child: new Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,22 +112,20 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                               elevation: 4.0,
                               splashColor: Colors.white10,
                               onPressed: (){
-                                if(_mprunning == false){
-                                  //Two different blocks for playing and stopping the radio
-                                    //this will build the play data and grab the album artwork if at all possible
-                                  if(playStopText == "Play"){
-                                      __buildImage(context);
-                                      refreshTimer();
-                                      _toggleRadio();
-                                      playStopText = "Stop";
-                                  }
-                                  //this will stop the state radio and prepare it for the next time that it is pressed play
-                                  else{
-                                    playStream = false;
-                                    playStopText = "Play";
+                                //Two different blocks for playing and stopping the radio
+                                //this will build the play data and grFab the album artwork if at all possible
+                                if(playStopText == "Play Live Radio"){
+                                    __buildImage(context);
+                                    refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
                                     _toggleRadio();
-                                    refresh();
-                                  }
+                                    playStopText = "Stop Live Radio";
+                                }
+                                //this will stop the state radio and prepare it for the next time that it is pressed play
+                                else{
+                                  playStream = false;
+                                  playStopText = "Play Live Radio";
+                                  _toggleRadio();
+                                  refresh();
                                 }
                               }
                           ),
@@ -157,7 +150,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                  __songContainer(selectedDate.toString()),
+
+                    __songContainer(selectedDate.toString()),
+
+
+
                   ],
                 ),
               ),
@@ -171,6 +168,124 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     // );
   }
 
+RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+//widget that will display all of the song data of the selected date
+Widget __songContainer(String date){
+  DateTime selectedDate = DateTime.parse(date);
+  DateTime currentDate = DateTime.now();                    
+  int different = currentDate.difference(selectedDate).inDays;  //difference between the selected date and the current date
+  //checking to see if the selected date is after the current date, as in it hasn't occurred yet
+  if(selectedDate.isAfter(currentDate)){
+    return new Expanded(
+      child: new ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index){
+          return Card(
+            child:Padding(
+              padding:const EdgeInsets.all(15.0),
+              child: 
+                Text(
+                  "Error, you have selected a date greater than the current date",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+            )
+          );
+        },
+      )
+    );
+  } else if(different > 30){  //checking to see if the selected date is older than 30 days of the current date, if so we can't display that info
+    return new Expanded(
+      child: new ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index){
+          return Card(
+            child:Padding(
+              padding:const EdgeInsets.all(15.0),
+              child: 
+                Text(
+                  "Error, you have selected a date older than 30 days",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
+            )
+          );
+        },
+      )
+    );
+  } 
+  else{
+      return new Expanded(
+          child: FutureBuilder(
+            future: getPost(date),  //grabbing the date
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
+              if(snapshot.hasData){
+                if(snapshot.data.length > 0){
+                  return new SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    controller: _refreshController,
+                    onRefresh: () async{
+                      await Future.delayed(Duration(seconds: 1));
+                      _refreshController.refreshCompleted();
+                      refresh();
+                    },
+                    onLoading: () async{
+                      await Future.delayed(Duration(seconds: 1));
+                      _refreshController.loadComplete();
+                    },
+                    child: new ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index){
+                        //each card is built with the song, artist name, and the time played
+                        return Card(
+                          child:Padding(
+                            padding:const EdgeInsets.all(15.0),
+                            child: 
+                              Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
+                          )
+                        );
+                      },
+                    ),
+                  );
+                }else{
+                  return new SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    controller: _refreshController,
+                    onRefresh: () async{
+                      await Future.delayed(Duration(seconds: 1));
+                      _refreshController.refreshCompleted();
+                      refresh();
+                    },
+                    onLoading: () async{
+                      await Future.delayed(Duration(seconds: 1));
+                      _refreshController.loadComplete();
+                    },
+                    child: ListView(
+                      children: <Widget>[
+                        Card(
+                          child: networkError(),
+                        )
+                      ],
+                    )
+                  );
+                }
+              }else{
+                return Center(
+                  child: new CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        );
+  }
+}
+
+
  @override
   bool get wantKeepAlive => true;
 }
@@ -180,7 +295,7 @@ Widget __imageHold(bool play){
   //default show the wsie logo
   if(play == false){
     return Image.asset(
-      '././assets/WSIE_4CBlackBackground.jpg',
+      '././assets/WSIE_Logo_Cutout.png',
       fit: BoxFit.contain,
       width: 200,
       height: 200,
@@ -201,26 +316,19 @@ Widget __imageHold(bool play){
                 builder: (BuildContext context2, AsyncSnapshot snapshot2){
                   if(snapshot2.hasData){
                     if(snapshot2.data !=null){
-                      // print("Second snapshot: " + snapshot2.data);
-                      // print("First snapshot: " + snapshot.data[0].timestap.toString());
                       return CachedNetworkImage(
                         placeholder: (context, url) => Image.asset(
-                          '././assets/WSIE_4CBlackBackground.jpg'
+                          '././assets/WSIE_Logo_Cutout.png'
                         ),
                         errorWidget: (context, url, error) => new Icon(Icons.error),
                         imageUrl: '${snapshot2.data}',
                         height: 200,
                         width: 200,
                       );
-                      // return Image.network(
-                      //   '${snapshot2.data}',
-                      //   height: 200,
-                      //   width: 200,
-                      // );
                     }else{
                       //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
                       return Image.asset(
-                        '././assets/WSIE_4CBlackBackground.jpg',
+                        '././assets/WSIE_Logo_Cutout.png',
                         fit: BoxFit.contain,
                         width: 200,
                         height: 200,
@@ -229,7 +337,7 @@ Widget __imageHold(bool play){
                   }else{
                     //if the actual snapshot was emtpy then this will re-display the WSIE logo
                     return Image.asset(
-                      '././assets/WSIE_4CBlackBackground.jpg',
+                      '././assets/WSIE_Logo_Cutout.png',
                       fit: BoxFit.contain,
                       width: 200,
                       height: 200,
@@ -240,7 +348,7 @@ Widget __imageHold(bool play){
             }else{
               //if the snapshot data is length 0
               return Image.asset(
-                '././assets/WSIE_4CBlackBackground.jpg',
+                '././assets/WSIE_Logo_Cutout.png',
                 fit: BoxFit.contain,
                 width: 200,
                 height: 200,
@@ -257,8 +365,6 @@ Widget __imageHold(bool play){
     );
   }
 }
-
-
 
 
   // API call to grab the album data, currently uses the iTune web API for building the album data
@@ -308,71 +414,7 @@ Widget __imageHold(bool play){
     }
   }
 
-//widget that will display all of the song data of the selected date
-Widget __songContainer(String date){
-  String temp = date;
-  //convert the current date to an integer to compare dates
-  int selectedDate = int.parse(temp.substring(0, 4));
-  selectedDate += int.parse(temp.substring(5, 7));
-  selectedDate += int.parse(temp.substring(8, 10));
-  //parse the date down to a number to compare with the selected date from the user
-  int currentDate = int.parse(DateTime.now().toString().substring(0,4));
-  currentDate += int.parse(DateTime.now().toString().substring(5,7));
-  currentDate += int.parse(DateTime.now().toString().substring(8,10));
 
-  if(selectedDate > currentDate){
-    return new Expanded(
-      child: new ListView.builder(
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index){
-          return Card(
-            child:Padding(
-              padding:const EdgeInsets.all(15.0),
-              child: 
-                Text(
-                  "Error, you have selected a date greater than the current date!",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  textAlign: TextAlign.center,
-                ),
-            )
-          );
-        },
-      )
-    );
-  } else{
-      return new Expanded(
-          child: FutureBuilder(
-            future: getPost(date),  //grabbing the date
-            builder: (BuildContext context, AsyncSnapshot snapshot){
-              //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
-              if(snapshot.hasData){
-                if(snapshot.data.length > 0){
-                  return new ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index){
-                      //each card is built with the song, artist name, and the time played
-                      return Card(
-                        child:Padding(
-                          padding:const EdgeInsets.all(15.0),
-                          child: 
-                            Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
-                        )
-                      );
-                    },
-                  );
-                }
-              } else{
-                return Center(
-                  child: new CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        );
-  }
-
- 
-}
 
 
 Future <List<Post>> getPost(String date) async{
