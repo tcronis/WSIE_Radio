@@ -10,7 +10,6 @@ import 'dart:convert';
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
 Post cachedPost = null;
-bool lostConnectionFlag = false;
 
 class StreamPage extends StatefulWidget{
   @override
@@ -316,6 +315,7 @@ Widget __imageHold(bool play){
                 builder: (BuildContext context2, AsyncSnapshot snapshot2){
                   if(snapshot2.hasData){
                     if(snapshot2.data !=null){
+                      print(snapshot2.data + " " + DateTime.now().toString());
                       return CachedNetworkImage(
                         placeholder: (context, url) => Image.asset(
                           '././assets/WSIE_Logo_Cutout.png'
