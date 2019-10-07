@@ -69,10 +69,23 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   }
   
   
-  
+  static bool showAdvert = false;
+  static DateTime startOfAdvertTime = null;
+  Timer _advertTimer = null;
   //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
-    _timer = Timer.periodic(Duration(seconds: 10), (Timer _timer) => setState(() {}));
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer _timer){setState(() {});});
+    
+    //advertisement timer that will show the donations advert when 30 seconds pass and will keep showing for 30 more seconds
+    _advertTimer = Timer.periodic(Duration(seconds: 30), (Timer _advertTimer){
+      //this will flip the show advertisement boolean and will also make sure that atleast 30 seconds have past the start of the timer.      
+      if(showAdvert && startOfAdvertTime.difference(DateTime.now()).inSeconds <= -30){
+        showAdvert = false;
+      }
+      else if(!showAdvert && startOfAdvertTime.difference(DateTime.now()).inSeconds <= -30){
+        showAdvert = true;
+      }
+    });
   }
 
   
@@ -115,6 +128,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                 //this will build the play data and grFab the album artwork if at all possible
                                 if(playStopText == "Play Live Radio"){
                                     __buildImage(context);
+                                    startOfAdvertTime = DateTime.now();
                                     refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
                                     _toggleRadio();
                                     playStopText = "Stop Live Radio";
@@ -122,10 +136,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                 //this will stop the state radio and prepare it for the next time that it is pressed play
                                 else{
                                   playStream = false;
-                                  playStopText = "Play Live Radio";
-                                  _toggleRadio();
-                                  _timer.cancel();
-                                  refresh();
+                                  playStopText = "Play Live Radio";   //chaning the text that the button shows for play/stop
+                                  _toggleRadio();                     //turning off the radio
+                                  _timer.cancel();                    //stopping the refresh timer for the app
+                                  _advertTimer.cancel();              //advertisement cycle reset
+                                  showAdvert = false;                 //advertisement cycle reset
+                                  startOfAdvertTime = null;           //resetting the 30 second timer for when the use hits play
+                                refresh();                            //refreshing the choices
                                 }
                               }
                           ),
@@ -288,44 +305,52 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
  @override
   bool get wantKeepAlive => true;
-}
 
-//this will hold the WSIE logo or the album artwork if the user is current streaming
-Widget __imageHold(bool play){
-  //default show the wsie logo
-  if(play == false){
-    return Image.asset(
-      '././assets/WSIE_Logo_Cutout.png',
-      fit: BoxFit.contain,
-      width: 200,
-      height: 200,
-    );
-  }else{
-    return Container(
-      height: 200.0,
-      width: 200.0,
-      child: FutureBuilder(
-        //this will get the new post, and then attempt to grab the Image to display
-        future: (getPost(DateTime.now().toString())),
-        builder: (BuildContext context, AsyncSnapshot snapshot){
-          if(snapshot.hasData){
-            if(snapshot.data.length > 0){
-              return FutureBuilder(
-                future:__getAlbumURL(snapshot.data[0]),
-                builder: (BuildContext context2, AsyncSnapshot snapshot2){
-                  if(snapshot2.hasData){
-                    if(snapshot2.data !=null){
-                      return CachedNetworkImage(
-                        placeholder: (context, url) => Image.asset(
-                          '././assets/WSIE_Logo_Cutout.png'
-                        ),
-                        errorWidget: (context, url, error) => new Icon(Icons.error),
-                        imageUrl: '${snapshot2.data}',
-                        height: 200,
-                        width: 200,
-                      );
+  //this will hold the WSIE logo or the album artwork if the user is current streaming
+  Widget __imageHold(bool play){
+    //default show the wsie logo
+    if(!play){
+      return Image.asset(
+        '././assets/WSIE_Logo_Cutout.png',
+        fit: BoxFit.contain,
+        width: 200,
+        height: 200,
+      );
+    }else if(play && !showAdvert){
+      return Container(
+        height: 200.0,
+        width: 200.0,
+        child: FutureBuilder(
+          //this will get the new post, and then attempt to grab the Image to display
+          future: (getPost(DateTime.now().toString())),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.hasData){
+              if(snapshot.data.length > 0){
+                return FutureBuilder(
+                  future:__getAlbumURL(snapshot.data[0]),
+                  builder: (BuildContext context2, AsyncSnapshot snapshot2){
+                    if(snapshot2.hasData){
+                      if(snapshot2.data !=null){
+                        return CachedNetworkImage(
+                          placeholder: (context, url) => Image.asset(
+                            '././assets/WSIE_Logo_Cutout.png'
+                          ),
+                          errorWidget: (context, url, error) => new Icon(Icons.error),
+                          imageUrl: '${snapshot2.data}',
+                          height: 200,
+                          width: 200,
+                        );
+                      }else{
+                        //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
+                        return Image.asset(
+                          '././assets/WSIE_Logo_Cutout.png',
+                          fit: BoxFit.contain,
+                          width: 200,
+                          height: 200,
+                        );
+                      }
                     }else{
-                      //this else had to be added because the response from iTune may actually be seen as containing data, but there actually just blank brackets
+                      //if the actual snapshot was emtpy then this will re-display the WSIE logo
                       return Image.asset(
                         '././assets/WSIE_Logo_Cutout.png',
                         fit: BoxFit.contain,
@@ -333,37 +358,39 @@ Widget __imageHold(bool play){
                         height: 200,
                       );
                     }
-                  }else{
-                    //if the actual snapshot was emtpy then this will re-display the WSIE logo
-                    return Image.asset(
-                      '././assets/WSIE_Logo_Cutout.png',
-                      fit: BoxFit.contain,
-                      width: 200,
-                      height: 200,
-                    );
-                  }
-                },
-              );
-            }else{
-              //if the snapshot data is length 0
-              return Image.asset(
-                '././assets/WSIE_Logo_Cutout.png',
-                fit: BoxFit.contain,
-                width: 200,
-                height: 200,
-              );
-            }
+                  },
+                );
+              }else{
+                //if the snapshot data is length 0
+                return Image.asset(
+                  '././assets/WSIE_Logo_Cutout.png',
+                  fit: BoxFit.contain,
+                  width: 200,
+                  height: 200,
+                );
+              }
 
-          }else{
-            return Center(
-            child: new CircularProgressIndicator(),
-          );
-          }
-        },
-      ),
-    );
+            }else{
+              return Center(
+              child: new CircularProgressIndicator(),
+            );
+            }
+          },
+        ),
+      );
+    }else{
+      return Container(
+        width: 200,
+        height: 200,
+        child: Text(
+          "Show advert here!"
+        ),
+      );
+    }
   }
+
 }
+
 
 
 // API call to grab the album data, currently uses the iTune web API for building the album data
