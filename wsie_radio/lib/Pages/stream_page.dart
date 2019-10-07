@@ -382,9 +382,22 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       return Container(
         width: 200,
         height: 200,
-        child: Text(
-          "Show advert here!"
-        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "Love what you're hearing? \n Swipe left to learn how to donate!",
+              style: TextStyle(color: Colors.black, fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+            Icon(
+              Icons.arrow_forward,
+              color: Colors.black,
+              size: 60,
+            )
+          ],
+        )
       );
     }
   }
