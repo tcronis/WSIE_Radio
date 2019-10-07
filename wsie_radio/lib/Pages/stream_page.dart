@@ -124,6 +124,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                   playStream = false;
                                   playStopText = "Play Live Radio";
                                   _toggleRadio();
+                                  _timer.cancel();
                                   refresh();
                                 }
                               }
@@ -300,7 +301,6 @@ Widget __imageHold(bool play){
       height: 200,
     );
   }else{
-    //checked the cached song to see if it is the same as the current song to prevent repeated calls for the same image
     return Container(
       height: 200.0,
       width: 200.0,
@@ -315,7 +315,6 @@ Widget __imageHold(bool play){
                 builder: (BuildContext context2, AsyncSnapshot snapshot2){
                   if(snapshot2.hasData){
                     if(snapshot2.data !=null){
-                      print(snapshot2.data + " " + DateTime.now().toString());
                       return CachedNetworkImage(
                         placeholder: (context, url) => Image.asset(
                           '././assets/WSIE_Logo_Cutout.png'
