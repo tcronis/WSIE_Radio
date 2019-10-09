@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:page_indicator/page_indicator.dart';
 
 import 'header_bar.dart';
-import 'stream_page.dart';
+// import 'stream_page.dart';
 //
 import 'header_bar.dart';
 import 'calendar_page.dart';
 import 'email_donations_page.dart';
 import 'facebook_page.dart';
+import 'stream_page_2.dart';
 
 
 const SIUERed = const Color(0xFFe41c24);
