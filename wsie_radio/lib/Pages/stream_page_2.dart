@@ -23,25 +23,36 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   DateTime selectedDate = DateTime.now();               //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
   bool playStream = false;                              //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
   Timer _timer;                                         //timer used in to time when to try and grab more album data when current streamin the radio              
+  static Post cachedPost = null;                        //variable used to cach the most current song being played
+  static Post cachedPost2 = null;                       //variable used in the _timer function that will check to see if the cachedPost has changed, if so then it will refresh the app
+  static DateTime startTime = null;                     //keeps track of time duration between advertisement showing
+  static DateTime runTime = null;                       //keeps track of the length that the current advertisement is showing for and will reset each time
+  static bool showAdvert = false;                       //bool used to signifiy if the __imageHolder should show the advert. or not
+  static bool counting = false;                         //bool used to make sure it doens't keep entering the loop to start the advert. 
+  static String cachediTunesURL = "";                   //cachedString value of iTunes URLs
   
-  
+  /* 
+    * Main Functionality - used to toggle the live stream of the radio via communication channels
+      - Will call either the iOS or Android code
+  */
   Future <void> _toggleRadio() async{
-    //checking to see if the radio is streaming or if it needs to stop playing
+    //A check to see if the user is currently streaming, if not then it starts, other wise it stops
     if(playStream == true){
       try{
-        final bool result = await platform.invokeMethod("playStream");  //get the result of the radio running
+        await platform.invokeMethod("playStream");  //get the result of the radio running
       } on PlatformException catch(e){
         print("Stream error: $e");
       }
     }else{
       try{
-        final bool result = await platform.invokeMethod("stopStream");  //recieve a response from the channel
+        await platform.invokeMethod("stopStream");  //recieve a response from the channel
       }on PlatformException catch(e){
         print("Stream error: $e");
       }
     }
-    // setState(() {});
   }
+
+
   //Date selection, will open a calendar and will need to be edited to match the fit of the rest of the application
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -70,13 +81,8 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     setState((){});
   }
   
-  static Post cachedPost = null;
-  static Post cachedPost2 = null;
-  static DateTime startTime = null; //keeps track of time duration between advertisement showing
-  static DateTime runTime = null;   //keeps track of the length that the current advertisement is showing for and will reset each time
-  static bool showAdvert = false;
-  static bool counting = false;
-  static String cachediTunesURL = "";
+
+
   //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
     
