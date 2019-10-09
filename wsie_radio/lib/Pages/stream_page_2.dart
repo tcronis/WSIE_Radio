@@ -72,8 +72,10 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   
   static Post cachedPost = null;
   static Post cachedPost2 = null;
-
-  
+  static DateTime startTime = null; //keeps track of time duration between advertisement showing
+  static DateTime runTime = null;   //keeps track of the length that the current advertisement is showing for and will reset each time
+  static bool showAdvert = false;
+  static bool counting = false;
   //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
     
@@ -81,11 +83,33 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       print("inside timer-------------------------------------------------");
       __songContainer(selectedDate.toString());
       __imageHolder(playStream);
+
+      if(runTime != null)
+        print(DateTime.now().difference(runTime).inSeconds);
+      //check to see if the runtime timer has reached the 20 second show time period
+      if(runTime != null && DateTime.now().difference(runTime).inSeconds >= 20){
+        print("in the reset advert");
+        showAdvert = false;
+        startTime = DateTime.now();
+        runTime = null;
+        counting = false;
+        refresh();
+      }
+      //if a minute has passed then it will tell the __imageHolder widget to show the advert. 
+      if(DateTime.now().difference(startTime).inMinutes >= 1 && counting == false){
+        print("in the show advert");
+        showAdvert = true;
+        runTime = DateTime.now();
+        counting = true;
+        refresh();
+      }
+      //caching a post the first time through, this is required to figure out when to refresh the app when a new song is queued or playing
       if(cachedPost != null && cachedPost2 == null){
         print("setting cachedPost2");
         cachedPost2 = cachedPost;
         // refresh();
       }
+      //if the two cached posts arent the same then it will refresh the app
       if(cachedPost != null && cachedPost2 != null && cachedPost2 != cachedPost){
         print("setting new state!");
         cachedPost2 = cachedPost;
@@ -136,6 +160,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                     __buildImage(context);
                                     refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
                                     _toggleRadio();
+                                    startTime = DateTime.now();
                                     playStopText = "Stop Live Radio";
                                 }
                                 //this will stop the state radio and prepare it for the next time that it is pressed play
@@ -143,7 +168,16 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                   playStream = false;
                                   playStopText = "Play Live Radio";   //chaning the text that the button shows for play/stop
                                   _toggleRadio();                     //turning off the radio
-                                  _timer.cancel();                    //stopping the refresh timer for the app
+
+                                  //Resetting all of play time objects that are use to refresh the app and redisplay items when streaming
+                                  _timer.cancel();                    
+                                  cachediTunesURL = "";
+                                  cachedPost = null;
+                                  cachedPost2 = null;
+                                  showAdvert = false;
+                                  counting = false;
+                                  startTime = null;
+                                  runTime = null;
                                   refresh();                            //refreshing the choices
                                 }
                               }
@@ -309,24 +343,43 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     print("LINE - 311 : building the __imageHolder widget!" + DateTime.now().toString());
     print("play - " + play.toString());
     if(!play){
-      if(_timer != null)
-        _timer.cancel();
+      // if(_timer != null)
+      //   // _timer.cancel();
       return Image.asset(
         '././assets/WSIE_Logo_Cutout.png',
         fit: BoxFit.contain,
         width: 200,
         height: 200,
       );
-    }else{
-      return FutureBuilder(
-        future: (__getAlbumURL()),
-        builder: (BuildContext context, AsyncSnapshot snapshot){
-          print("snapshot data - " + snapshot.data.toString());
-          if(snapshot.connectionState == ConnectionState.done && snapshot.data != null){
-            print("Re-creating the CachedNetowrkImage");
-            print(snapshot.data.toString());
-            return Container(
-              child: CachedNetworkImage(
+    }else if(play && !showAdvert){
+      return Container(
+        width: 200,
+        height: 200,
+        child: FutureBuilder(
+          future: (__getAlbumURL()),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            print("snapshot data - " + snapshot.data.toString());
+            //this will check to make sure that the returned data isn't a repeat of previous data (itunes URL) and actually contains data before showing anything
+            if(snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data.toString() !=  "no matching url"){
+              print("Re-creating the CachedNetowrkImage");
+              print(snapshot.data.toString());
+              return CachedNetworkImage(
+                  placeholder: (context, url) => Image.asset(
+                    '././assets/WSIE_Logo_Cutout.png',
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.contain,
+                  ),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
+                  imageUrl: '${snapshot.data}',
+                  height: 200,
+                  width: 200,
+                );
+            }
+            //if the connction isn't done, but the snapshot has an old URL (usually called when the user forces a refresh while streaming)
+            else if(snapshot.connectionState != ConnectionState.done && snapshot.data != null && snapshot.data.toString() != "no matching url"){
+              print("Re-creating the cachedNetworkImage, but using an old URL instead");
+              return CachedNetworkImage(
                 placeholder: (context, url) => Image.asset(
                   '././assets/WSIE_Logo_Cutout.png',
                   height: 200,
@@ -337,22 +390,33 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                 imageUrl: '${snapshot.data}',
                 height: 200,
                 width: 200,
-              ),
-            );
-          }else{
-            return Container(
-              child: Image.asset(
-                '././assets/WSIE_Logo_Cutout.png',
-                fit: BoxFit.contain,
-                width: 200,
-                height: 200,
-              ),
-            ); 
-          }
-        },
+              );
+            }
+            //the snapshot either doesn't have data from the itunes API call
+            else{
+              return Image.asset(
+                  '././assets/WSIE_Logo_Cutout.png',
+                  fit: BoxFit.contain,
+                  width: 200,
+                  height: 200,
+                ); 
+            }
+          },
+        ),
       );
-      
-      
+    }else if(play && showAdvert){
+      return Container(
+        width: 200,
+        height: 200,
+        child: new Text(
+          'advert show',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: SIUERed,
+          ),
+        ),
+      );
     }
 
 
@@ -371,7 +435,7 @@ Future<String> __getAlbumURL() async{
     Post data = currentStreamData[0];
     String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
     final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 && response.body.toString().length > 0){
       final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
       if(jsonResponse['resultCount'] > 0){
         int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
@@ -405,7 +469,7 @@ Future<String> __getAlbumURL() async{
           //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
           else{
             print("returning null - 1");
-            return cachediTunesURL;
+            return "no matching url";
           }
             // return null;
 
@@ -440,7 +504,7 @@ Future <List<Post>> getPost(String date) async{
   try{
     String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
     final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 && response.body.toString().length > 0){
       final jsonResponse = json.decode(response.body);
       List<Post> data = new List<Post>();
       for(int i=0; i < jsonResponse.length; i++){
@@ -450,6 +514,8 @@ Future <List<Post>> getPost(String date) async{
     }
     else {
       print("response code of bad http call: $response.statusCode");
+      List<Post> nullReturn = new List<Post>();
+      return nullReturn;
     }
   }catch(e){
     print("exception: $e");
