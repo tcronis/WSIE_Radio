@@ -226,11 +226,16 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
 
 
-  //widget that will display all of the song data of the selected date
+  /*
+    * Main Functionality - this will display all of the song played for a current day, by default it will display the current day's songs
+      - Has an ability to pull down or pull upwards to refresh the songs for the day selected
+      - Will only update on it own when live streaming and a new post (song) is found
+  */
   Widget __songContainer(String date){
-    DateTime selectedDate = DateTime.parse(date);
-    DateTime currentDate = DateTime.now();                    
+    DateTime selectedDate = DateTime.parse(date);                 //user's selected date
+    DateTime currentDate = DateTime.now();                        //current date
     int different = currentDate.difference(selectedDate).inDays;  //difference between the selected date and the current date
+
     //checking to see if the selected date is after the current date, as in it hasn't occurred yet
     if(selectedDate.isAfter(currentDate)){
       return new Expanded(
@@ -251,7 +256,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
           },
         )
       );
-    } else if(different > 30){  //checking to see if the selected date is older than 30 days of the current date, if so we can't display that info
+    } 
+    //checking to see if the selected date is older than 30 days of the current date, if so we can't display that info
+    else if(different > 30){  
       return new Expanded(
         child: new ListView.builder(
           itemCount: 1,
@@ -271,86 +278,89 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         )
       );
     } 
+    //display the song's played for the current day
     else{
-        return new Expanded(
-            child: FutureBuilder(
-              future: getPost(date),  //grabbing the date
-              builder: (BuildContext context, AsyncSnapshot snapshot){
-                //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
-                if(snapshot.hasData){
-                  if(snapshot.data.length > 0){
-                    return new SmartRefresher(
-                      enablePullDown: true,
-                      enablePullUp: true,
-                      controller: _refreshController,
-                      onRefresh: () async{
-                        await Future.delayed(Duration(seconds: 1));
-                        _refreshController.refreshCompleted();
-                        refresh();
-                      },
-                      onLoading: () async{
-                        await Future.delayed(Duration(seconds: 1));
-                        _refreshController.loadComplete();
-                      },
-                      child: new ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index){
-                          //each card is built with the song, artist name, and the time played
-                          return Card(
-                            child:Padding(
-                              padding:const EdgeInsets.all(15.0),
-                              child: 
-                                Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
-                            )
-                          );
-                        },
-                      ),
-                    );
-                  }else{
-                    return new SmartRefresher(
-                      enablePullDown: true,
-                      enablePullUp: true,
-                      controller: _refreshController,
-                      onRefresh: () async{
-                        await Future.delayed(Duration(seconds: 1));
-                        _refreshController.refreshCompleted();
-                        refresh();
-                      },
-                      onLoading: () async{
-                        await Future.delayed(Duration(seconds: 1));
-                        _refreshController.loadComplete();
-                      },
-                      child: ListView(
-                        children: <Widget>[
-                          Card(
-                            child: networkError(),
-                          )
-                        ],
+      return new Expanded(
+        child: FutureBuilder(
+          future: getPost(date),  //grabbing the list of posts for the day 
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            //checking to make sure the response has data from the ICECAST sever, will double check to make sure the JSON is intrepreted as data even if blank with {}
+            if(snapshot.hasData){
+              //Check to make sure that the JSON object's data is larger than one (essentially checking if the WSIE response array is of length larger than 0)
+              if(snapshot.data.length > 0){
+                return new SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  controller: _refreshController,
+                  onRefresh: () async{
+                    await Future.delayed(Duration(seconds: 1));
+                    _refreshController.refreshCompleted();
+                    refresh();
+                  },
+                  onLoading: () async{
+                    await Future.delayed(Duration(seconds: 1));
+                    _refreshController.loadComplete();
+                  },
+                  //display all of the song cards
+                  child: new ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index){
+                      //each card is built with the song, artist name, and the time played
+                      return Card(
+                        child:Padding(
+                          padding:const EdgeInsets.all(15.0),
+                          child: 
+                            Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
+                        )
+                      );
+                    },
+                  ),
+                );
+              }
+              //the WSIE returned a null reponse for the given date, but still responded okay
+              else{
+                return new SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  controller: _refreshController,
+                  onRefresh: () async{
+                    await Future.delayed(Duration(seconds: 1));
+                    _refreshController.refreshCompleted();
+                    refresh();
+                  },
+                  onLoading: () async{
+                    await Future.delayed(Duration(seconds: 1));
+                    _refreshController.loadComplete();
+                  },
+                  //display a network error 
+                  child: ListView(
+                    children: <Widget>[
+                      Card(
+                        child: networkError(),
                       )
-                    );
-                  }
-                }else{
-                  return Center(
-                    child: new CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
-          );
-    }
+                    ],
+                  )
+                );
+              }
+            }
+            //the snapshot hasn't returned with anything (as in still waiting for a response from WSIE) therefore display the wait progress indicator
+            else{
+              return Center(
+                child: new CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      );
+  }
 }
 
 
- @override
-  bool get wantKeepAlive => true;
+
 
 
   Widget __imageHolder(bool play){
-    // print("LINE - 311 : building the __imageHolder widget!" + DateTime.now().toString());
-    // print("play - " + play.toString());
     if(!play){
-      // if(_timer != null)
-      //   // _timer.cancel();
       return Image.asset(
         '././assets/WSIE_Logo_Cutout.png',
         fit: BoxFit.contain,
@@ -524,6 +534,10 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       return temp;
     }
   }
+
+  //want to keep the page of the application alive, not matter if the user goes to another page
+  @override
+  bool get wantKeepAlive => true;
 
 }
 
