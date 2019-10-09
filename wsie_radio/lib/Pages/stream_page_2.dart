@@ -52,30 +52,24 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     }
   }
 
-
-  //Date selection, will open a calendar and will need to be edited to match the fit of the rest of the application
+  /*
+    * Main Functionality - a calendar that will open to allow a user to select a different date to view previous songs
+      - Will grab a new date that the user selects and update the _songContainer via a refresh of the app
+  */
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    //checking to see if the user actually selected a new date, if not then nothing will refresh
+    //Checking to make sure that the user actually selected a date, otherwise nothing will change in runtime
     if (picked != null && picked != selectedDate)
       setState(() {
         refresh();
         selectedDate = picked;
       });
   }
-
-  Future<Null> __buildImage(BuildContext conext) async{
-    // playStream = true;
-    // refresh();
-    setState((){
-      playStream = true;
-    });
-  }
-
+  
   //method that will refresht the widget/page on command
   refresh(){
     setState((){});
@@ -164,11 +158,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                 //Two different blocks for playing and stopping the radio
                                 //this will build the play data and grFab the album artwork if at all possible
                                 if(playStopText == "Play Live Radio"){
-                                    __buildImage(context);
+                                    // __buildImage(context);
+                                    playStream = true;
                                     refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
                                     _toggleRadio();
                                     startTime = DateTime.now();
                                     playStopText = "Stop Live Radio";
+                                    refresh();
                                 }
                                 //this will stop the state radio and prepare it for the next time that it is pressed play
                                 else{
