@@ -19,17 +19,19 @@ class StreamPage extends StatefulWidget{
 
 class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<StreamPage>{
              
-  var formatter = new DateFormat("EEEE, MMMM, d" );     //formatter for displaying the current day/date of the song data being pulled
-  DateTime selectedDate = DateTime.now();               //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
-  bool playStream = false;                              //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
-  Timer _timer;                                         //timer used in to time when to try and grab more album data when current streamin the radio              
-  static Post cachedPost = null;                        //variable used to cach the most current song being played
-  static Post cachedPost2 = null;                       //variable used in the _timer function that will check to see if the cachedPost has changed, if so then it will refresh the app
-  static DateTime startTime = null;                     //keeps track of time duration between advertisement showing
-  static DateTime runTime = null;                       //keeps track of the length that the current advertisement is showing for and will reset each time
-  static bool showAdvert = false;                       //bool used to signifiy if the __imageHolder should show the advert. or not
-  static bool counting = false;                         //bool used to make sure it doens't keep entering the loop to start the advert. 
-  static String cachediTunesURL = "";                   //cachedString value of iTunes URLs
+  var formatter = new DateFormat("EEEE, MMMM, d" );                                   //formatter for displaying the current day/date of the song data being pulled
+  DateTime selectedDate = DateTime.now();                                             //var that stores the date selected by the user for displaying the song data being pulled from the ICECAST sever
+  bool playStream = false;                                                            //var used to prevent user spam of the play/stop button, it stalls the button so that it wont spam
+  Timer _timer;                                                                       //timer used in to time when to try and grab more album data when current streamin the radio   
+  String playStopText = "Play Live Radio";                                            //string used to display the text in Play/Stop live radio button on the UI           
+  RefreshController _refreshController = RefreshController(initialRefresh: false);    //controller used for the pull to refresh the songContainer 
+  static Post cachedPost = null;                                                      //variable used to cach the most current song being played
+  static Post cachedPost2 = null;                                                     //variable used in the _timer function that will check to see if the cachedPost has changed, if so then it will refresh the app
+  static DateTime startTime = null;                                                   //keeps track of time duration between advertisement showing
+  static DateTime runTime = null;                                                     //keeps track of the length that the current advertisement is showing for and will reset each time
+  static bool showAdvert = false;                                                     //bool used to signifiy if the __imageHolder should show the advert. or not
+  static bool counting = false;                                                       //bool used to make sure it doens't keep entering the loop to start the advert. 
+  static String cachediTunesURL = "";                                                 //cachedString value of iTunes URLs
   
   /* 
     * Main Functionality - used to toggle the live stream of the radio via communication channels
@@ -78,10 +80,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   
 
 
-    /*
+  /*
     * Main Functionality - this will assign functions to the _timer so that the __imageHolder and the __songContainer will be updated in due time
       - This will call to update __imageHolder when streaming the radio, it will call every 5 seconds
-      - 
+      - Will check to see if the advert. has been displayed for 20 seconds, if so, then it will go back to displaying the album artwork
+      - Will start a advertisement timer to track if a one min has passed, if so then it will tell the __imageHolder widget to display the WSIE advert. 
+      - Will cache a Post class object to check to see if the __imageHolder object has found a new song live streaming
+        - If so then it will update the whole UI and backend so that the user will see the new current live streaming song
   */
   void refreshTimer(){
     _timer = Timer.periodic(Duration(seconds: 10), (Timer _timer){
@@ -119,8 +124,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   }
 
   
-
-  String playStopText = "Play Live Radio";
+  /*
+    The main UI elements of the application
+   */
   @override
   Widget build(BuildContext context){
     return Theme(
@@ -154,22 +160,20 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                               elevation: 4.0,
                               splashColor: Colors.white10,
                               onPressed: (){
-                                //Two different blocks for playing and stopping the radio
-                                //this will build the play data and grFab the album artwork if at all possible
+                                //Play Live Radio commands for when the user wants to start streaming
                                 if(playStopText == "Play Live Radio"){
-                                    playStream = true;
-                                    refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
-                                    _toggleRadio();
-                                    startTime = DateTime.now();
-                                    playStopText = "Stop Live Radio";
-                                    refresh();
+                                    playStream = true;                //set the stream object to display all live stream elements
+                                    refreshTimer();                   //toggle the timer to start running the API calls
+                                    _toggleRadio();                   //start the actual audio live stream
+                                    startTime = DateTime.now();       //start tracking the audio list stream time for the advertisement
+                                    playStopText = "Stop Live Radio"; //Change the Play Live Stream button to Stop Live Stream
+                                    refresh();                        //refresh the UI and backend of the app
                                 }
-                                //this will stop the state radio and prepare it for the next time that it is pressed play
+                                //Stop Live Radio commands for when the user wants to stop streaming
                                 else{
-                                  playStream = false;
+                                  playStream = false;                 //set the stream object to false so that the UI elements stop trying to auto re-display
                                   playStopText = "Play Live Radio";   //chaning the text that the button shows for play/stop
                                   _toggleRadio();                     //turning off the radio
-
                                   //Resetting all of play time objects that are use to refresh the app and redisplay items when streaming
                                   _timer.cancel();                    
                                   cachediTunesURL = "";
@@ -179,10 +183,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                   counting = false;
                                   startTime = null;
                                   runTime = null;
-                                  refresh();                            //refreshing the choices
+                                  refresh();                            //refresh the app backend and frontend
                                 }
                               }
                           ),
+                          //button used to bring up the calendar for when the user wants to select a different date to show the songs for
                           new RaisedButton(
                               child: const Text('Select Date'),
                               color: SIUERed,
@@ -219,7 +224,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   }
 
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
 
   //widget that will display all of the song data of the selected date
   Widget __songContainer(String date){
