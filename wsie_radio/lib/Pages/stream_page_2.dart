@@ -65,56 +65,55 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     //Checking to make sure that the user actually selected a date, otherwise nothing will change in runtime
     if (picked != null && picked != selectedDate)
       setState(() {
-        refresh();
         selectedDate = picked;
       });
   }
-  
-  //method that will refresht the widget/page on command
+
+  /*
+    * Main Functionality - a quick method to refresh the app (both backend and front end)
+  */
   refresh(){
     setState((){});
   }
   
 
 
-  //Refresh Time for the refreshing album data and so forth
+    /*
+    * Main Functionality - this will assign functions to the _timer so that the __imageHolder and the __songContainer will be updated in due time
+      - This will call to update __imageHolder when streaming the radio, it will call every 5 seconds
+      - 
+  */
   void refreshTimer(){
-    
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer){
-      // print("inside timer-------------------------------------------------");
-      __songContainer(selectedDate.toString());
-      __imageHolder(playStream);
+    _timer = Timer.periodic(Duration(seconds: 10), (Timer _timer){
+      __imageHolder(playStream);  //call to update the __imageHolder and the cachedPost object         
 
-      if(runTime != null)
-        print(DateTime.now().difference(runTime).inSeconds);
       //check to see if the runtime timer has reached the 20 second show time period
       if(runTime != null && DateTime.now().difference(runTime).inSeconds >= 20){
-        // print("in the reset advert");
         showAdvert = false;
         startTime = DateTime.now();
         runTime = null;
         counting = false;
         refresh();
       }
-      //if a minute has passed then it will tell the __imageHolder widget to show the advert. 
+
+      //if a minute has passed then it will tell the __imageHolder widget to show the advertisement
       if(DateTime.now().difference(startTime).inMinutes >= 1 && counting == false){
-        // print("in the show advert");
         showAdvert = true;
         runTime = DateTime.now();
         counting = true;
         refresh();
       }
-      //caching a post the first time through, this is required to figure out when to refresh the app when a new song is queued or playing
+
+      //Caching a post after the first 10 seconds to be used later to see if the cachedPost has changed
       if(cachedPost != null && cachedPost2 == null){
-        // print("setting cachedPost2");
         cachedPost2 = cachedPost;
-        // refresh();
       }
-      //if the two cached posts arent the same then it will refresh the app
+
+      //If the cachedPost has changed, then it will refresh the application
       if(cachedPost != null && cachedPost2 != null && cachedPost2 != cachedPost){
-        // print("setting new state!");
-        cachedPost2 = cachedPost;
-        refresh();
+        __songContainer(selectedDate.toString()); //re-create the song container with the new song(s)
+        cachedPost2 = cachedPost;                 //store the new cachedPost in cachedPost2
+        refresh();                                //refresh the application
       }
     });
   }
@@ -158,7 +157,6 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                                 //Two different blocks for playing and stopping the radio
                                 //this will build the play data and grFab the album artwork if at all possible
                                 if(playStopText == "Play Live Radio"){
-                                    // __buildImage(context);
                                     playStream = true;
                                     refreshTimer();                 //time between refresh-cycles when streaming (will query the ICECAST sever for a new song, if found then new data is displayed)
                                     _toggleRadio();
@@ -240,7 +238,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                 child: 
                   Text(
                     "Error, you have selected a date greater than the current date",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
               )
@@ -259,7 +257,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                 child: 
                   Text(
                     "Error, you have selected a date older than 30 days",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
               )
@@ -497,7 +495,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     String temp = date.substring(0,4);
     temp += date.substring(5, 7);
     temp += date.substring(8,10);
-
+    print("calling to get another post: " + DateTime.now().toString());
 
     try{
       String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
