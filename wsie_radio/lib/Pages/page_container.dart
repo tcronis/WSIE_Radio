@@ -37,7 +37,7 @@ class __PageHolder extends State<PageHolder>{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: headerBar(),
+      // appBar: headerBar(),
       body: new Container(
         color: Colors.white,
         child: Container(
