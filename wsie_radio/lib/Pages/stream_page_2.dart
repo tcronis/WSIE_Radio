@@ -76,11 +76,12 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   static DateTime runTime = null;   //keeps track of the length that the current advertisement is showing for and will reset each time
   static bool showAdvert = false;
   static bool counting = false;
+  static String cachediTunesURL = "";
   //Refresh Time for the refreshing album data and so forth
   void refreshTimer(){
     
     _timer = Timer.periodic(Duration(seconds: 5), (Timer _timer){
-      print("inside timer-------------------------------------------------");
+      // print("inside timer-------------------------------------------------");
       __songContainer(selectedDate.toString());
       __imageHolder(playStream);
 
@@ -88,7 +89,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         print(DateTime.now().difference(runTime).inSeconds);
       //check to see if the runtime timer has reached the 20 second show time period
       if(runTime != null && DateTime.now().difference(runTime).inSeconds >= 20){
-        print("in the reset advert");
+        // print("in the reset advert");
         showAdvert = false;
         startTime = DateTime.now();
         runTime = null;
@@ -97,7 +98,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       }
       //if a minute has passed then it will tell the __imageHolder widget to show the advert. 
       if(DateTime.now().difference(startTime).inMinutes >= 1 && counting == false){
-        print("in the show advert");
+        // print("in the show advert");
         showAdvert = true;
         runTime = DateTime.now();
         counting = true;
@@ -105,13 +106,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       }
       //caching a post the first time through, this is required to figure out when to refresh the app when a new song is queued or playing
       if(cachedPost != null && cachedPost2 == null){
-        print("setting cachedPost2");
+        // print("setting cachedPost2");
         cachedPost2 = cachedPost;
         // refresh();
       }
       //if the two cached posts arent the same then it will refresh the app
       if(cachedPost != null && cachedPost2 != null && cachedPost2 != cachedPost){
-        print("setting new state!");
+        // print("setting new state!");
         cachedPost2 = cachedPost;
         refresh();
       }
@@ -340,8 +341,8 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
 
   Widget __imageHolder(bool play){
-    print("LINE - 311 : building the __imageHolder widget!" + DateTime.now().toString());
-    print("play - " + play.toString());
+    // print("LINE - 311 : building the __imageHolder widget!" + DateTime.now().toString());
+    // print("play - " + play.toString());
     if(!play){
       // if(_timer != null)
       //   // _timer.cancel();
@@ -358,11 +359,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         child: FutureBuilder(
           future: (__getAlbumURL()),
           builder: (BuildContext context, AsyncSnapshot snapshot){
-            print("snapshot data - " + snapshot.data.toString());
+            // print("snapshot data - " + snapshot.data.toString());
             //this will check to make sure that the returned data isn't a repeat of previous data (itunes URL) and actually contains data before showing anything
             if(snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data.toString() !=  "no matching url"){
-              print("Re-creating the CachedNetowrkImage");
-              print(snapshot.data.toString());
+              // print("Re-creating the CachedNetowrkImage");
+              // print(snapshot.data.toString());
               return CachedNetworkImage(
                   placeholder: (context, url) => Image.asset(
                     '././assets/WSIE_Logo_Cutout.png',
@@ -378,7 +379,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
             }
             //if the connction isn't done, but the snapshot has an old URL (usually called when the user forces a refresh while streaming)
             else if(snapshot.connectionState != ConnectionState.done && snapshot.data != null && snapshot.data.toString() != "no matching url"){
-              print("Re-creating the cachedNetworkImage, but using an old URL instead");
+              // print("Re-creating the cachedNetworkImage, but using an old URL instead");
               return CachedNetworkImage(
                 placeholder: (context, url) => Image.asset(
                   '././assets/WSIE_Logo_Cutout.png',
@@ -421,108 +422,103 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
 
   }
-  String cachediTunesURL = "";
 
-// API call to grab the album data, currently uses the iTune web API for building the album data
-Future<String> __getAlbumURL() async{
 
-  final currentStreamData = await getPost(DateTime.now().toString());
-  // print("cachedPost - " + cachedPost.album.toString());
-  print("currentStreamData - " + currentStreamData[0].album.toString());
-  if(currentStreamData.length > 0 && (cachedPost == null || (cachedPost != null && cachedPost != currentStreamData[0]))){
-    print("new song being played!" + currentStreamData[0].artist);
-    cachedPost = currentStreamData[0];
-    Post data = currentStreamData[0];
-    String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
-    final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
-    if(response.statusCode == 200 && response.body.toString().length > 0){
-      final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
-      if(jsonResponse['resultCount'] > 0){
-        int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
-        int best = -1;
-        int location = -1;
-        //if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
-          //based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE
-        if(numResults > 0){
-          for(int i=0; i < numResults; i++){
-            int count = -1;  
-            if(data.artist.toUpperCase() == jsonResponse['results'][i]['artistName'].toString().toUpperCase())
-              count++;
-            if(data.album.toLowerCase() == jsonResponse['results'][i]['trackName'].toString().toUpperCase())
-              count++;
-            //if the track name and artist name both match and it is higher or equal to the best count (which keeps track of the best option) then it will become the best option
-            if(count >= best){
-              best = count; //setting as the new best
-              location = i; //setting the location of the new best in the array
+  // API call to grab the album data, currently uses the iTune web API for building the album data
+  Future<String> __getAlbumURL() async{
+    final currentStreamData = await getPost(DateTime.now().toString());
+    // print("cachedPost - " + cachedPost.album.toString());
+    // print("currentStreamData - " + currentStreamData[0].album.toString());
+    if(currentStreamData.length > 0 && (cachedPost == null || (cachedPost != null && cachedPost != currentStreamData[0]))){
+      // print("new song being played!" + currentStreamData[0].artist);
+      cachedPost = currentStreamData[0];
+      Post data = currentStreamData[0];
+      String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
+      final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
+      if(response.statusCode == 200 && response.body.toString().length > 0){
+        final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
+        if(jsonResponse['resultCount'] > 0){
+          int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
+          int best = -1;
+          int location = -1;
+          //if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
+            //based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE
+          if(numResults > 0){
+            for(int i=0; i < numResults; i++){
+              int count = -1;  
+              if(data.artist.toUpperCase() == jsonResponse['results'][i]['artistName'].toString().toUpperCase())
+                count++;
+              if(data.album.toLowerCase() == jsonResponse['results'][i]['trackName'].toString().toUpperCase())
+                count++;
+              //if the track name and artist name both match and it is higher or equal to the best count (which keeps track of the best option) then it will become the best option
+              if(count >= best){
+                best = count; //setting as the new best
+                location = i; //setting the location of the new best in the array
+              }
             }
+            //if sometype of matching artist name or track name was found then it will store it will display it's url
+            if(location != -1){
+              //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
+              String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
+              int pos = resultURL.indexOf('source') + 7;
+              String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
+              // print("returning - " + finalUrl);
+              cachediTunesURL = finalUrl;
+              return finalUrl;
+            }
+            //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
+            else{
+              // print("returning null - 1");
+              return "no matching url";
+            }
+              // return null;
+
           }
-          //if sometype of matching artist name or track name was found then it will store it will display it's url
-          if(location != -1){
-            //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
-            String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
-            int pos = resultURL.indexOf('source') + 7;
-            String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
-            print("returning - " + finalUrl);
-            cachediTunesURL = finalUrl;
-            return finalUrl;
-          }
-          //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
           else{
-            print("returning null - 1");
-            return "no matching url";
+            // print("returning null - 2");
+            return cachediTunesURL;
           }
             // return null;
-
         }
-        else{
-          print("returning null - 2");
-          return cachediTunesURL;
-        }
-          // return null;
       }
-    }
-    else {
-      print("response code of bad http call: $response.statusCode");
-    }
+      else {
+        print("response code of bad http call: $response.statusCode");
+      }
 
-  } else {
-    print("returning null - 3");
-    return cachediTunesURL;
+    } else {
+      // print("returning null - 3");
+      return cachediTunesURL;
+    }
   }
 
+  Future <List<Post>> getPost(String date) async{
+    String temp = date.substring(0,4);
+    temp += date.substring(5, 7);
+    temp += date.substring(8,10);
 
-}
 
-
-
-
-Future <List<Post>> getPost(String date) async{
-  String temp = date.substring(0,4);
-  temp += date.substring(5, 7);
-  temp += date.substring(8,10);
-
-  try{
-    String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
-    final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
-    if(response.statusCode == 200 && response.body.toString().length > 0){
-      final jsonResponse = json.decode(response.body);
-      List<Post> data = new List<Post>();
-      for(int i=0; i < jsonResponse.length; i++){
-        data.add(new Post.fromJson(jsonResponse[i]));
+    try{
+      String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
+      final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
+      if(response.statusCode == 200 && response.body.toString().length > 0){
+        final jsonResponse = json.decode(response.body);
+        List<Post> data = new List<Post>();
+        for(int i=0; i < jsonResponse.length; i++){
+          data.add(new Post.fromJson(jsonResponse[i]));
+        }
+        return data;
       }
-      return data;
+      else {
+        print("response code of bad http call: $response.statusCode");
+        List<Post> nullReturn = new List<Post>();
+        return nullReturn;
+      }
+    }catch(e){
+      print("exception: $e");
+      List<Post> temp = new List<Post>();
+      return temp;
     }
-    else {
-      print("response code of bad http call: $response.statusCode");
-      List<Post> nullReturn = new List<Post>();
-      return nullReturn;
-    }
-  }catch(e){
-    print("exception: $e");
-    List<Post> temp = new List<Post>();
-    return temp;
   }
-}
 
 }
 
