@@ -438,6 +438,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
   }
 
+  static DateTime songPlayTime = null;
 
   // API call to grab the album data, currently uses the iTune web API for building the album data
   Future<String> __getAlbumURL() async{
@@ -475,6 +476,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
             if(location != -1){
               //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
               String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
+              int miliSecondRunTime = int.tryParse(jsonResponse['results'][location]['trackTimeMillis'].toString());
+              songPlayTime = DateTime.now().add(new Duration(milliseconds: miliSecondRunTime));
+              print("Song - " + data.artist + ", " + data.title);
+              print("Time the song started: " + data.playtime + " Expected song end time: " + songPlayTime.toString() + " milisecond runtime from iTunes "  + miliSecondRunTime.toString() + "\n");
+
+
+
               int pos = resultURL.indexOf('source') + 7;
               String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
               // print("returning - " + finalUrl);
@@ -510,7 +518,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     String temp = date.substring(0,4);
     temp += date.substring(5, 7);
     temp += date.substring(8,10);
-    print("calling to get another post: " + DateTime.now().toString());
+    // print("calling to get another post: " + DateTime.now().toString());
 
     try{
       String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
