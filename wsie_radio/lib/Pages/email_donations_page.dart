@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 
 class EmailAndDonations extends StatefulWidget{
@@ -50,6 +51,18 @@ class __EmailAndDonations extends State<EmailAndDonations>{
       },
     );
   }
+
+   _facebookLaunch() async {
+    
+      const url = 'https://m.facebook.com/WSIE887theSound/';
+            
+            if (await canLaunch(url)) {
+              await launch(url);
+            } else {
+              throw '$url could not be reached';
+            }
+            
+          }
 
   Future<http.Response> _sendEmailMessage() async {
 
@@ -253,6 +266,32 @@ class __EmailAndDonations extends State<EmailAndDonations>{
                         ),
                       ),
 
+                    ],
+                  ),
+
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        //padding: const EdgeInsets.fromLTRB(12, 20, 0, 0),
+                        padding: const EdgeInsets.all(10.0),
+                        
+                        child: RaisedButton(
+                          //child: 
+                          
+                          onPressed: ()=> _facebookLaunch(),
+                          child: Text(
+                            'Go to Facebook Page',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0
+                            ),
+                          ),
+                          
+                        ),
+                        
+                      ),
                     ],
                   ),
 
