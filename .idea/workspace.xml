@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3956d8b8-6e32-4384-b14b-10475206501d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wsie_radio/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/android/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wsie_radio/lib/Pages/facebook_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/lib/Pages/facebook_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wsie_radio/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/wsie_radio/pubspec.lock" afterDir="false" />
@@ -24,10 +22,22 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/android/app/src/main/java/com/example/wsie_radio/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1020">
+              <caret line="80" column="29" selection-start-line="80" selection-start-column="29" selection-end-line="80" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/calendar_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+            <state relative-caret-position="136">
+              <caret line="8" column="14" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="14" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -36,10 +46,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/facebook_page.dart">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/email_donations_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1258">
-              <caret line="96" column="32" selection-start-line="96" selection-start-column="32" selection-end-line="96" selection-end-column="32" />
+            <state relative-caret-position="392">
+              <caret line="113" selection-start-line="113" selection-end-line="113" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -48,17 +58,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart">
+        <entry file="file://$PROJECT_DIR$/wsie_radio/android/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="374" column="22" selection-start-line="374" selection-start-column="22" selection-end-line="374" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#64#0" expanded="true" />
-                <element signature="e#3037#3108#0" />
-                <element signature="e#3178#3203#0" />
-                <element signature="e#3288#3415#0" />
-                <element signature="e#16759#17254#0" />
-              </folding>
+            <state relative-caret-position="986">
+              <caret line="58" selection-start-line="58" selection-end-line="58" />
             </state>
           </provider>
         </entry>
@@ -95,10 +98,11 @@
     </findStrings>
   </component>
   <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Email_Messages" />
+        <entry key="$PROJECT_DIR$" value="master1" />
       </map>
     </option>
   </component>
@@ -124,9 +128,8 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-7" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
@@ -134,55 +137,14 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
-              <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
-              <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WSIE_Radio" type="462c0819:PsiDirectoryNode" />
-              <item name="wsie_radio" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="Pages" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WSIE_Radio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
-    <property name="AnalyzeApkAction.lastApkPath" value="$USER_HOME$/flutter" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Dart" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Downloads/flutter-rssreader-master/flutter-rssreader-master" />
@@ -244,23 +206,25 @@
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Captures" order="0" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.17927383" />
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.022692889" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info id="Resources Explorer" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="0" visible="true" weight="0.39443535" />
+      <window_info id="Build Variants" order="8" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Run" order="0" visible="true" weight="0.2618658" />
       <window_info anchor="bottom" id="TODO" order="1" />
       <window_info anchor="bottom" id="Debug" order="2" weight="0.06546645" />
       <window_info anchor="bottom" id="Terminal" order="3" weight="0.23567921" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" weight="0.3289689" />
       <window_info anchor="bottom" id="Flutter Performance" order="5" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="6" />
-      <window_info anchor="bottom" id="Dart Analysis" order="7" weight="0.32907802" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.3289689" />
+      <window_info anchor="bottom" id="Version Control" order="6" weight="0.3289689" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.49924356" weight="0.20458265" />
+      <window_info anchor="bottom" id="Logcat" order="8" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
       <window_info anchor="right" id="Theme Preview" order="1" />
       <window_info anchor="right" id="Flutter Inspector" order="2" weight="0.110738255" />
@@ -519,22 +483,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wsie_radio/build/stream_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="374" column="22" selection-start-line="374" selection-start-column="22" selection-end-line="374" selection-end-column="22" />
+        <state relative-caret-position="1020">
+          <caret line="80" column="29" selection-start-line="80" selection-start-column="29" selection-end-line="80" selection-end-column="29" />
           <folding>
-            <element signature="e#0#64#0" expanded="true" />
-            <element signature="e#3037#3108#0" />
-            <element signature="e#3178#3203#0" />
-            <element signature="e#3288#3415#0" />
-            <element signature="e#16759#17254#0" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/calendar_page.dart">
+    <entry file="file://$PROJECT_DIR$/wsie_radio/android/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+        <state relative-caret-position="986">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/wsie_radio/android/app/libs/jar-file.jar!/JotformAPIClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="20" column="49" selection-start-line="20" selection-start-column="49" selection-end-line="20" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/stream_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="14" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="14" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -543,8 +517,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wsie_radio/lib/Pages/facebook_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1258">
-          <caret line="96" column="32" selection-start-line="96" selection-start-column="32" selection-end-line="96" selection-end-column="32" />
+        <state relative-caret-position="392">
+          <caret line="113" selection-start-line="113" selection-end-line="113" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
