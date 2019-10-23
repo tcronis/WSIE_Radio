@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:webfeed/webfeed.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+//import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 
 import 'date_event_card.dart';
 import 'date_info.dart';
@@ -22,6 +24,41 @@ class Calendar extends StatefulWidget{
   State createState() => new __Calendar();
 }
 
+void goToUrl(String IncomingUrl) async {
+
+  String url = IncomingUrl;
+
+  if (await canLaunch(url)) {
+
+    await launch(url);
+
+  } else { 
+    throw '$url could not be reached';
+   }
+}
+
+Future<Map> getNewsFeed() async {
+
+  var client = http.Client();
+
+  final response = await client.get("http://www.siue.edu/news/current.xml");
+
+  if(response.statusCode == 200){
+
+    var NEWSFEED = new RssFeed.parse(response.body);
+
+    Map map = new Map();
+
+    for (int i = 0; i < NEWSFEED.items.length; i++) {
+      map[i] = NEWSFEED.items[i].title.toString() + "########" + NEWSFEED.items[i].pubDate.toString() + "########" + NEWSFEED.items[i].link.toString();
+    }
+
+    return map;
+  }else {
+    throw Exception("Post could not be loaded.");
+  }
+}
+
 class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Calendar>{
   //final List<Date> dateEvents;
   //final AtomFeed feed;
@@ -31,41 +68,32 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
 
   @override
   Widget build(BuildContext context){
-    return Scaffold(
+    return MaterialApp(
+      home: Scaffold(
       appBar: AppBar(
         title: Text('News and Events'),
         backgroundColor: Colors.red[900],
       ),
       body: ListView.builder(
-          itemCount: 5,//feed.items.length,
+          itemCount: 1,//feed.items.length,
            itemBuilder: (BuildContext ctxt, int index) {
-          //   final item = feed.items[index];
-          //   return ListTile(
-          //     title: Text(item.title),
-          //     subtitle: Text('Published: ' +
-          //         DateFormat.yMd().format(DateTime.parse(item.published))),
-          //     contentPadding: EdgeInsets.all(16.0),
-          //     onTap: () async {
-          //   //  Navigator.push(
-          //   //         context,
-          //   //         MaterialPageRoute(
-          //   //             builder: (context) => main(
-          //   //                 item.id.replaceFirst('http', 'https')
-          //   //                 )));
-          //     },
-          //   );
-          }),
-    );
-    //return _buildList(context);
-      // color: Colors.white,
-      // home: Scaffold(
-      //   body: new Container(
-      //     //now insert items
-      //      //_buildList(context);
+             return Column(
+               children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+                    child:SizedBox(
+                      height: 500,
+                      width: double.infinity,
+                      child: _eventData(),
+                    )
+                  )
+               ]
+             );
           
-      //   ),
-      // ),
-    //);
+          }),
+    ));
+    
+    
   }
 
   // ListView _buildList(context) {
@@ -79,6 +107,60 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
   //   //   },
   //   // );
   // }
+
+    Widget _eventData(){
+
+      return new Container(
+        child: FutureBuilder(
+
+          future: getNewsFeed(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.hasData){
+              if(snapshot.data.length > 0){
+                return new ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index){
+
+                    List eventData = snapshot.data[index].toString().split('########');
+
+                    return Card(
+                        child:Padding(
+                          padding:const EdgeInsets.all(10.0),
+                          child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: "Title: ${eventData[0]}\n",
+                                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                                TextSpan(
+                                    text: "Date Published: ${eventData[1]}\nLink:",
+                                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                                TextSpan(
+                                    text: "${eventData[2]}",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline),
+                                    recognizer: TapGestureRecognizer()
+                                     ..onTap = () {
+                                       goToUrl(eventData[2]);
+                                      }
+                                      )
+                              ])),
+
+                        )
+                    );
+                  },
+                );
+              }
+            } else{
+              return Center(
+                child: new CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      );
+    }
   
 
   @override
