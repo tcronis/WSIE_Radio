@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-
-import 'package:webview_flutter/webview_flutter.dart';
-//import 'package:html.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:webfeed/webfeed.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 
 
 class FacebookFeed extends StatefulWidget {
@@ -15,79 +14,158 @@ class FacebookFeed extends StatefulWidget {
   State createState() => new __FacebookFeed();
 }
 
+void _launchURL(String IncomingUrl) async {
+  String url = IncomingUrl;
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
+Future<Map> fetchLatestNews() async {
+  var client = http.Client();
+  final response = await client.get("https://developer.apple.com/news/releases/rss/releases.rss");
+
+  if(response.statusCode == 200){
+    var RSSFEED = new RssFeed.parse(response.body);
+    Map map = new Map();
+    for (int i = 0; i < RSSFEED.items.length; i++) {
+      map[i] = RSSFEED.items[i].title.toString() + "########" + RSSFEED.items[i].link.toString();
+    }
+
+    return map;
+  }else {
+    throw Exception("Failed to load post.");
+  }
+}
 
 class __FacebookFeed extends State<FacebookFeed> {
-  Completer<WebViewController> _controller = Completer<WebViewController>();
-  final String initialUrl3 = "NavigationRequest(url: https://m.facebook.com/pg/WSIE887theSound/posts/, isForMainFrame: true)";
-  final String initialUrl2 = "https://www.facebook.com/pg/WSIE887theSound/posts/";
 
-  //final myWebView = (WebView) findViewById(R.id.webview);
-  
-  
-  
-  
   @override
-  Widget build(BuildContext context) {
-      
-    
-    // int width = MediaQuery.of(context).size.width.roundToDouble().toInt();
-    // int height = MediaQuery.of(context).size.height.roundToDouble().toInt();
-    return new Container(
-      child: WebView(
-          initialUrl: "https://m.facebook.com/WSIE887theSound/",
-          //initialUrl: "https://www.youtube.com",
-          javascriptMode: JavascriptMode.unrestricted,
-          debuggingEnabled: true,   
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
-            
-          },
-          navigationDelegate: (NavigationRequest request){
-            print(request.url);
-            if (!request.url.startsWith("https://m.facebook.com/WSIE887theSound/")) {
-              print('navigation to $request is blocked');
-              return NavigationDecision.prevent;
-            }
-            if(request.url.contains("%") || request.url.contains("profile") ){
-              print('navigation to $request is blocked');
-              return NavigationDecision.prevent;
-            }
-            if(request.url.contains("login")){
-              print('navigation to $request is blocked');
-              return NavigationDecision.prevent;
-            }
-            if(request.url.contains("photos")){
-              print('navigation to $request is blocked');
-              return NavigationDecision.prevent;
-            }
-            // if (request.url != "https://www.facebook.com/WSIE887theSound/" ){
-            //   print(request.url);
-            //   print('navigation to $request is blocked');
-            //   return NavigationDecision.prevent;
-            // }
-            
-            if (request.url.startsWith("https://m.facebook.com/login.php?next=https%3A%2F%2Fm.facebook.com%2FWSIE887theSound%2F&ref=104&rs=1&lrs=1&rid=134507189896890&lrid=134507189896890&refsrc=https%3A%2F%2Fm.facebook.com%2FWSIE887theSound%2F")) {
-              print('navigation to $request is blocked');
-              return NavigationDecision.prevent;
-            }
-            if (request.url.startsWith("https://m.facebook.com/r.php?next=https%3A%2F%2Fm.facebook.com%2FWSIE887theSound%2F&cid=104&rs=1&rid=134507189896890")) {
-              print('navigation to $request is blocked');
-              return NavigationDecision.prevent;
-            }
-            // if (request.url.startsWith("https://m.facebook.com")) {
-            //   print('navigation to $request is blocked');
-            //   return NavigationDecision.prevent;
-            // }
-            print(request.url.toString());
-            return NavigationDecision.navigate;
-          },
-        
+  Widget build(BuildContext context){
+    return MaterialApp(
+      color: Colors.white,
+      home: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        body: new Container(
+          child: new ListView.builder(
+            itemCount: 1,
+            itemBuilder: (BuildContext context, int index){
+              return Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                    child: Text(
+                      'Donation Information:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22.0),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(22.0, 20.0, 22.0, 0.0),
+                    child: Text(
+                      'WSIE 88.7 The Sound is completely funded by donations from our community; If you like what you are hearing, please consider donating! ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.0),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 0.0),
+                    child: SizedBox(
+                      width: 330.0,
+                      height: 50.0,
+                      child: RaisedButton(
+                        color: Colors.red,
+                        onPressed: ()=> _launchURL('https://relay-ccon.foundation.siue.edu/ccon/new_gift.do?action=newGift&giving_page_id=0&site=SIUE_Foundation/'),
+                        child: Text('Donate',style: TextStyle(fontSize: 24, color: Colors.black),),
+                      ),
+                    )
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
+                    child: Text(
+                      'Underwriter Information:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22.0),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+                    child:SizedBox(
+                      height: 325,
+                      width: double.infinity,
+                      child: __songContainer(),
+                    )
+                  )
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 
-  String sub(){
+  Widget __songContainer(){
 
-  }
+      return new Container(
+        child: FutureBuilder(
+          future: fetchLatestNews(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.hasData){
+              if(snapshot.data.length > 0){
+                return new ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index){
+                    List titleAndLinks = snapshot.data[index].toString().split('########');
+                    return Card(
+                        child:Padding(
+                          padding:const EdgeInsets.all(10.0),
+                          child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: "Title: ${titleAndLinks[0]}\nLink:",
+                                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                                TextSpan(
+                                    text: "${titleAndLinks[1]}",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _launchURL(titleAndLinks[1]);
+                                      })
+                              ])),
+//                          child:
+//                          Text("Title: ${titleAndLinks[0]}\nLink:${titleAndLinks[1]}"),
+                        )
+                    );
+                  },
+                );
+              }
+            } else{
+              return Center(
+                child: new CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      );
+    }
 }
+
+
+
+
+
