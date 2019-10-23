@@ -17,7 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  url_launcher: ^4.0.3
+  # url_launcher: ^4.0.3
   flutter_date_picker: ^0.1.8
   cached_network_image: ^1.1.1
   page_indicator: ^0.1.3
