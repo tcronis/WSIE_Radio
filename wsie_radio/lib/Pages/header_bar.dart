@@ -6,18 +6,18 @@ Widget headerBar(){
     title: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          'WSIE Radio',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        // Text(
+        //   'WSIE Radio',
+        //   style: TextStyle(
+        //     color: Colors.white,
+        //   ),
+        // ),
         // Image.asset(
         //   'assets/WSIE_4CBlackBackground.jpg',
         //   fit: BoxFit.contain,
         // ),
       ],
     ),
-    backgroundColor: SIUERed,
+    backgroundColor: Colors.white,
   );
 }
