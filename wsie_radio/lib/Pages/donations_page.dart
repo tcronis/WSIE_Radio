@@ -8,10 +8,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
 
 
-class FacebookFeed extends StatefulWidget {
+class DonationsPage extends StatefulWidget {
   
   @override
-  State createState() => new __FacebookFeed();
+  State createState() => new __DonationsPage();
 }
 
 void _launchURL(String IncomingUrl) async {
@@ -40,7 +40,11 @@ Future<Map> fetchLatestNews() async {
   }
 }
 
-class __FacebookFeed extends State<FacebookFeed> {
+class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClientMixin<DonationsPage> {
+  //want to keep the page of the application alive, not matter if the user goes to another page
+  @override
+  bool get wantKeepAlive => true;
+
 
   @override
   Widget build(BuildContext context){

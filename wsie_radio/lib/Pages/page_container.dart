@@ -5,7 +5,7 @@ import 'package:page_indicator/page_indicator.dart';
 //
 import 'calendar_page.dart';
 import 'email_donations_page.dart';
-import 'facebook_page.dart';
+import 'donations_page.dart';
 import 'stream_page_2.dart';
 
 
@@ -43,7 +43,7 @@ class __PageHolder extends State<PageHolder>{
             pageView: PageView(
               children: <Widget>[
                 StreamPage(),
-                FacebookFeed(),
+                DonationsPage(),
                 Calendar(),
                 EmailAndDonations(),
 
