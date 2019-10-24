@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
-// import './Pages/homepage.dart';
 import './Pages/page_container.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'dart:async';
+
+
+
+
 
 void main(){
   runApp(new MaterialApp(
@@ -29,50 +31,52 @@ class _MyAppState extends State<MyApp> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-          child: Container(
-            child: new Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                new Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Image.asset(
-                      './assets/siue_logo.jpg',
-                      fit: BoxFit.contain,
-                      width: 200,
-                      height: 200,
-                    ),
-                  ],
-                ),
-                new Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Image.asset(
-                      './assets/WSIE_4COriginal.jpg',
-                      fit: BoxFit.contain,
-                      width: 200,
-                      height: 200,
-                    ),
-                  ],
-                ),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation<Color>(SIUERed),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          ),
+    return new SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+            child: Container(
+              child: new Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Image.asset(
+                        './assets/siue_logo.jpg',
+                        fit: BoxFit.contain,
+                        width: 200,
+                        height: 200,
+                      ),
+                    ],
+                  ),
+                  new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Image.asset(
+                        './assets/WSIE_4COriginal.jpg',
+                        fit: BoxFit.contain,
+                        width: 200,
+                        height: 200,
+                      ),
+                    ],
+                  ),
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(SIUERed),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ),
+        ),
       ),
     );
   }
@@ -84,11 +88,9 @@ class HomeScreen extends StatelessWidget{
       return new MaterialApp(
         color: Colors.white,
         home: new SafeArea(
-          top: true,
-          bottom: true,
+          // minimum: const EdgeInsets.all(16.0),
           child: new PageHolder(),
         )
-        // new PageHolder(),
       );
     }
 }

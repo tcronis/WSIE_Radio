@@ -6,7 +6,6 @@ import 'package:webfeed/webfeed.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
 
-import 'date_event_card.dart';
 import 'date_info.dart';
 
 
