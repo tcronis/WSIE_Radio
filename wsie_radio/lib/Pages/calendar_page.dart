@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-//import 'package:intl/intl.dart';
 import 'package:webfeed/webfeed.dart';
-//import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
+// import 'package:wsie_radio/Pages/email_donations_page.dart' as prefix0;
 
-import 'date_info.dart';
+// import 'date_info.dart';
+
+const card_padding = 15.0;
+const card_text_size = 15.0;
+const heading_text_size = 20.0;
+const body_text_size = 18.0;
 
 
 // void main() async {
@@ -75,13 +79,14 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
                Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 5.0),
                 child: Text(
                   'WSIE Events Calendar:',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 22.0),
+                      fontWeight: FontWeight.bold,
+                      fontSize: heading_text_size),
                 ),
               ),
               _eventData(),
@@ -133,24 +138,22 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                   shrinkWrap: true,
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index){
-
                     List eventData = snapshot.data[index].toString().split('########');
-
                     return Card(
                         child:Padding(
-                          padding:const EdgeInsets.all(10.0),
+                          padding:const EdgeInsets.all(card_padding),
                           child: RichText(
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: "Title: ${eventData[0]}\n",
-                                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                                    style: TextStyle(fontSize: card_text_size, color: Colors.black)),
                                 TextSpan(
-                                    text: "Date Published: ${eventData[1]}\nLink:",
-                                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                                    text: "Date Published: ${eventData[1]}\n",
+                                    style: TextStyle(fontSize: card_text_size, color: Colors.black)),
                                 TextSpan(
-                                    text: "${eventData[2]}",
+                                    text: "Link",
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: card_text_size,
                                         color: Colors.blue,
                                         decoration: TextDecoration.underline),
                                     recognizer: TapGestureRecognizer()
