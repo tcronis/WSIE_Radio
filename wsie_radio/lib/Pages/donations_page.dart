@@ -14,6 +14,7 @@ const card_padding = 15.0;
 const card_text_size = 15.0;
 const heading_text_size = 20.0;
 const body_text_size = 18.0;
+const SIUERed = const Color(0xFFe41c24);
 
 class DonationsPage extends StatefulWidget {
   
@@ -95,7 +96,8 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                       width: 330.0,
                       height: 50.0,
                       child: RaisedButton(
-                        color: Colors.red,
+                        color: SIUERed,
+                        elevation: 4.0,
                         onPressed: ()=> _launchURL('https://relay-ccon.foundation.siue.edu/ccon/new_gift.do?action=newGift&giving_page_id=0&site=SIUE_Foundation/'),
                         child: Text('Donate',style: TextStyle(fontSize: heading_text_size, color: Colors.white),),
                       ),
