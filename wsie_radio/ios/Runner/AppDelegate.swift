@@ -34,15 +34,20 @@ import AVFoundation
     private func startPlaying(){
     let url = URL(string: "http://streaming.siue.edu:8000/wsie.mp3")!
         
-    do{
-        try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCa)
-    }catch{
-        
-    }
-        
     let playerItem = AVPlayerItem.init(url: url)
     self.playerQueue.insert(playerItem, after: nil)
     self.playerQueue.play()
+        
+        do{
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            do{
+                try AVAudioSession.sharedInstance().setActive(true)
+            }catch{
+                
+            }
+        }catch{
+            
+        }
     }
     
     private func stopPlaying(){
