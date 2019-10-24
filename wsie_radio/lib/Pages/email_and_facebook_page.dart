@@ -133,198 +133,193 @@ class __EmailAndFacebookPage extends State<EmailAndFacebookPage> with AutomaticK
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: new Container(
-          child: new GestureDetector(
-            onTap: (){
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: new ListView.builder(
-              itemCount: 1,
-              itemBuilder: (BuildContext context, int index){
-                return Column(
+        child: new GestureDetector(
+          onTap: (){
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: new Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 5.0),
+                  child: Text(
+                    'Song Requests and More Information:',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: heading_text_size),
+                  ),
+                ),
+
+
+
+                new Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 5.0),
-                      child: Text(
-                        'Song Requests and More Information:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: heading_text_size),
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: SizedBox(
+                        height: 75.0,
+                        width: (MediaQuery.of(context).size.width)*0.71,
+                        child: TextFormField(
+                          controller: nameController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Name",
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                new Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: SizedBox(
+                        height: 75.0,
+                        width: (MediaQuery.of(context).size.width)*0.71,
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Email",
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                new Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: SizedBox(
+                        height: 125.0,
+                        width: (MediaQuery.of(context).size.width)*0.71,
+                        child: TextFormField(
+                          controller: messageController,
+                          //autofocus: true,
+                          onEditingComplete: deactivate,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Message",
+                          ),
+                          maxLines: 10,
+                        )
+                      ),
+                    ),
+                  ],
+                ),
+
+                new Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Container(
+                        child: new Checkbox(
+                          value: checkVal,
+                          onChanged: (bool value){
+                            setState(() {
+                              checkVal = value;
+                            });
+                          }
+                        ),
+                        // alignment: FractionalOffset(.06,.05),
                       ),
                     ),
 
-
-
-                    new Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: SizedBox(
-                            height: 75.0,
-                            width: (MediaQuery.of(context).size.width)*0.71,
-                            child: TextFormField(
-                              controller: nameController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Name",
-                              ),
-                              maxLines: 1,
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Container(
+                        child: new Text("Register for WSIE Emailing List",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: body_text_size,
+                              fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
+                        // alignment: FractionalOffset(.06,.05),
+                      ),
                     ),
+                  ],
+                ),
 
-                    new Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: SizedBox(
-                            height: 75.0,
-                            width: (MediaQuery.of(context).size.width)*0.71,
-                            child: TextFormField(
-                              controller: emailController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Email",
-                              ),
-                              maxLines: 1,
-                            ),
+                new Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: RaisedButton(
+                        elevation: 4.0,
+                        color: SIUERed,
+                        onPressed: ()=> _showDialog(),
+                        child: Text(
+                          'Send',
+                          style: TextStyle(
+                              color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
-
-                    new Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: SizedBox(
-                            height: 125.0,
-                            width: (MediaQuery.of(context).size.width)*0.71,
-                            child: TextFormField(
-                              controller: messageController,
-                              //autofocus: true,
-                              onEditingComplete: deactivate,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Message",
-                              ),
-                              maxLines: 10,
-                            )
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    new Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Container(
-                            child: new Checkbox(
-                              value: checkVal,
-                              onChanged: (bool value){
-                                setState(() {
-                                  checkVal = value;
-                                });
-                              }
-                            ),
-                            // alignment: FractionalOffset(.06,.05),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Container(
-                            child: new Text("Register for WSIE Emailing List",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: body_text_size,
-                                  fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            // alignment: FractionalOffset(.06,.05),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    new Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: RaisedButton(
-                            elevation: 4.0,
-                            color: SIUERed,
-                            onPressed: ()=> _showDialog(),
-                            child: Text(
-                              'Send',
-                              style: TextStyle(
-                                  color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-
-                    new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: RaisedButton(
-                            elevation: 4.0,
-                            color: SIUERed,
-                            onPressed: ()=> _facebookLaunch(),
-                            child: Text(
-                              'Go to Facebook Page',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                         Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child:Text(
-                            "This application was designed and developed\n by SIUE's department of computer science",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: body_text_size),
-                          ),
-                        ),
-                      ],
-
-
+                      ),
                     )
                   ],
-                );
-              }
-            ),         
+                ),
+
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: RaisedButton(
+                        elevation: 4.0,
+                        color: SIUERed,
+                        onPressed: ()=> _facebookLaunch(),
+                        child: Text(
+                          'Go to Facebook Page',
+                          style: TextStyle(
+                              color: Colors.white
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                      Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child:Text(
+                        "This application was designed and developed\n by SIUE's department of computer science",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: body_text_size),
+                      ),
+                    ),
+                  ],
+
+
+                )
+              ],
+            ),      
           ),
         ),
       ),
