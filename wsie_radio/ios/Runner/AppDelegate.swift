@@ -37,6 +37,17 @@ import AVFoundation
     let playerItem = AVPlayerItem.init(url: url)
     self.playerQueue.insert(playerItem, after: nil)
     self.playerQueue.play()
+        
+        do{
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            do{
+                try AVAudioSession.sharedInstance().setActive(true)
+            }catch{
+                
+            }
+        }catch{
+            
+        }
     }
     
     private func stopPlaying(){
