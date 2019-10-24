@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:page_indicator/page_indicator.dart';
+import 'package:wsie_radio/Pages/email_and_facebook_page.dart';
 
 // import 'stream_page.dart';
 //
 import 'calendar_page.dart';
-import 'email_donations_page.dart';
+import 'email_and_facebook_page.dart';
 import 'donations_page.dart';
 import 'stream_page_2.dart';
 
@@ -45,7 +46,7 @@ class __PageHolder extends State<PageHolder>{
                 StreamPage(),
                 DonationsPage(),
                 Calendar(),
-                EmailAndDonations(),
+                EmailAndFacebookPage(),
 
                 
                 //Insert all of your page widgets here

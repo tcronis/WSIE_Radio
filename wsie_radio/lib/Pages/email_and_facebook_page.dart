@@ -6,11 +6,11 @@ const card_text_size = 15.0;
 const heading_text_size = 20.0;
 const body_text_size = 18.0;
 
-class EmailAndDonations extends StatefulWidget{
+class EmailAndFacebookPage extends StatefulWidget{
   @override
-  State createState() => new __EmailAndDonations();
+  State createState() => new __EmailAndFacebookPage();
 }
-class __EmailAndDonations extends State<EmailAndDonations> with AutomaticKeepAliveClientMixin<EmailAndDonations>{
+class __EmailAndFacebookPage extends State<EmailAndFacebookPage> with AutomaticKeepAliveClientMixin<EmailAndFacebookPage>{
   //want to keep the page of the application alive, not matter if the user goes to another page
   @override
   bool get wantKeepAlive => true;
@@ -140,48 +140,64 @@ class __EmailAndDonations extends State<EmailAndDonations> with AutomaticKeepAli
               itemCount: 1,
               itemBuilder: (BuildContext context, int index){
                 return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 15.0),
+                      padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 5.0),
                       child: Text(
                         'Song Requests and More Information:',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.black,
-                            fontSize: 22.0),
+                            fontWeight: FontWeight.bold,
+                            fontSize: heading_text_size),
                       ),
                     ),
-                    new Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 5, 10, 20),
-                          child: Container(
-                            child: new Text("From: ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0
-                              ),
-                            ),
-                            alignment: FractionalOffset(.06,.05),
-                          ),
-                        ),
 
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: SizedBox(
-                            height: 75.0,
-                            width: (MediaQuery.of(context).size.width)*0.71,
-                            child: TextFormField(
-                              controller: nameController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Name",
-                              ),
-                              maxLines: 1,
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: ,
+                      ),
+                    )
+
+                    // new Row(
+                    //   mainAxisSize: MainAxisSize.max,
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: <Widget>[
+                    //     Padding(
+                    //       padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    //       child: SizedBox(
+                    //         height: 75.0,
+                    //         width: (MediaQuery.of(context).size.width)*0.71,
+                    //         child: TextFormField(
+                    //           controller: nameController,
+                    //           decoration: const InputDecoration(
+                    //             border: OutlineInputBorder(),
+                    //             labelText: "Name",
+                    //           ),
+                    //           maxLines: 1,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 9, 0, 0),
+                      child: SizedBox(
+                        height: 60.0,
+                        width: (MediaQuery.of(context).size.width)*0.71,
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Email",
                           ),
+                          maxLines: 1,
                         ),
-                      ],
+                      ),
                     ),
 
                     Padding(
@@ -202,38 +218,24 @@ class __EmailAndDonations extends State<EmailAndDonations> with AutomaticKeepAli
                       ),
                     ),
 
-                    new Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 6, 10, 0),
-                          child: Container(
-                            child: new Text("Email: ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0
-                              ),
-                            ),
-                            alignment: FractionalOffset(.06,.05),
-                          ),
-                        ),
-                      ]
-                    ),
+                    // new Row(
+                    //   children: <Widget>[
+                    //     Padding(
+                    //       padding: const EdgeInsets.fromLTRB(20, 6, 10, 0),
+                    //       child: Container(
+                    //         child: new Text("Email: ",
+                    //           style: TextStyle(
+                    //               color: Colors.black,
+                    //               fontSize: 20.0
+                    //           ),
+                    //         ),
+                    //         alignment: FractionalOffset(.06,.05),
+                    //       ),
+                    //     ),
+                    //   ]
+                    // ),
 
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 9, 0, 0),
-                      child: SizedBox(
-                        height: 60.0,
-                        width: (MediaQuery.of(context).size.width)*0.71,
-                        child: TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Email",
-                          ),
-                          maxLines: 1,
-                        ),
-                      ),
-                    ),
+                    
 
                     new Row(
                       children: <Widget>[
