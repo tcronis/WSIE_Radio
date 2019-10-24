@@ -9,14 +9,18 @@ import 'dart:async';
 import 'dart:convert';
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
+
+
+const card_padding = 15.0;
+const card_text_size = 15.0;
+const heading_text_size = 20.0;
+
 Post cachedPost = null;
 
 class StreamPage extends StatefulWidget{
   @override
   State createState() => new __StreamPage();
 }
-
-
 class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<StreamPage>{
              
   var formatter = new DateFormat("EEEE, MMMM, d" );                                   //formatter for displaying the current day/date of the song data being pulled
@@ -206,7 +210,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                       padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                       child: new Text(
                         formatter.format(selectedDate).toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: heading_text_size),
                       ),
                     ),
                     __songContainer(selectedDate.toString()),
@@ -244,11 +248,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
           itemBuilder: (BuildContext context, int index){
             return Card(
               child:Padding(
-                padding:const EdgeInsets.all(15.0),
+                padding:const EdgeInsets.all(card_padding),
                 child: 
                   Text(
                     "Error, you have selected a date greater than the current date",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: card_text_size),
                     textAlign: TextAlign.center,
                   ),
               )
@@ -265,11 +269,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
           itemBuilder: (BuildContext context, int index){
             return Card(
               child:Padding(
-                padding:const EdgeInsets.all(15.0),
+                padding:const EdgeInsets.all(card_padding),
                 child: 
                   Text(
                     "Error, you have selected a date older than 30 days",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: card_text_size),
                     textAlign: TextAlign.center,
                   ),
               )
@@ -308,9 +312,16 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                       //each card is built with the song, artist name, and the time played
                       return Card(
                         child:Padding(
-                          padding:const EdgeInsets.all(15.0),
-                          child: 
-                            Text("Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}"),
+                          padding:const EdgeInsets.all(card_padding),
+                          child: RichText(
+                            text: TextSpan(
+                              text:  "Title: ${snapshot.data[index].title}\nArtist: ${snapshot.data[index].artist}\nTime Played: ${snapshot.data[index].playtime}",
+                              style: TextStyle(
+                                fontSize: card_text_size,
+                                color: Colors.black,
+                              )
+                            )
+                          )
                         )
                       );
                     },

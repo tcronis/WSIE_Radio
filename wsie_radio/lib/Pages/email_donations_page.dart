@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-
+const card_padding = 15.0;
+const card_text_size = 15.0;
+const heading_text_size = 20.0;
+const body_text_size = 18.0;
 
 class EmailAndDonations extends StatefulWidget{
   @override
   State createState() => new __EmailAndDonations();
 }
-class __EmailAndDonations extends State<EmailAndDonations>{
+class __EmailAndDonations extends State<EmailAndDonations> with AutomaticKeepAliveClientMixin<EmailAndDonations>{
+  //want to keep the page of the application alive, not matter if the user goes to another page
+  @override
+  bool get wantKeepAlive => true;
 
+  
   final emailController = TextEditingController();
   final messageController = TextEditingController();
   final nameController = TextEditingController();
