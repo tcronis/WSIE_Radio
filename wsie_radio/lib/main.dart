@@ -5,19 +5,6 @@ import './Pages/page_container.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'dart:async';
 
-
-// void main() => runApp(new MyApp());
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return new MaterialApp(
-//       color: Colors.white,
-//       home: new PageHolder(),
-//     );
-//   }
-// }
-
 void main(){
   runApp(new MaterialApp(
     home: new MyApp(),
@@ -96,38 +83,14 @@ class HomeScreen extends StatelessWidget{
     Widget build(BuildContext context) {
       return new MaterialApp(
         color: Colors.white,
-        home: new PageHolder(),
+        home: new SafeArea(
+          top: true,
+          bottom: true,
+          child: new PageHolder(),
+        )
+        // new PageHolder(),
       );
     }
 }
-
-// class _MyAppState extends State<MyApp> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return new SplashScreen(
-//       seconds: 10,
-//       navigateAfterSeconds: new AfterSplash(),
-//       image: Image.asset(
-//           'assets/siue_logo.jpg',
-//           fit: BoxFit.contain,
-//       ),
-//       backgroundColor: Colors.white,
-//       styleTextUnderTheLoader: new TextStyle(),
-//       photoSize: 100.0,
-//       onClick: ()=>print("Flutter Egypt"),
-//       loaderColor: Colors.red
-//     );
-//   }
-// }
-
-// class AfterSplash extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return new MaterialApp(
-//       color: Colors.white,
-//       home: new PageHolder(),
-//     );
-//   }
-// }
 
 
