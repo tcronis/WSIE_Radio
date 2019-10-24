@@ -53,13 +53,12 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: new Container(
-          child: new ListView.builder(
-            itemCount: 1,
-            itemBuilder: (BuildContext context, int index){
-              return Column(
+          child: new Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
                     child: Text(
                       'Donation Information:',
                       textAlign: TextAlign.center,
@@ -112,9 +111,7 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                     )
                   )
                 ],
-              );
-            },
-          ),
+              )
         ),
       ),
     );

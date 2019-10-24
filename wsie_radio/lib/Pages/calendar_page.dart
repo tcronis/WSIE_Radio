@@ -69,27 +69,41 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
   Widget build(BuildContext context){
     return MaterialApp(
       home: Scaffold(
-      appBar: AppBar(
-        title: Text('News and Events'),
-        backgroundColor: Colors.red[900],
-      ),
-      body: ListView.builder(
-          itemCount: 1,//feed.items.length,
-           itemBuilder: (BuildContext ctxt, int index) {
-             return Column(
-               children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
-                    child:SizedBox(
-                      height: 500,
-                      width: double.infinity,
-                      child: _eventData(),
-                    )
-                  )
-               ]
-             );
-          
-          }),
+        body: new Container(
+          child: new Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+               Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                child: Text(
+                  'WSIE Events Calendar:',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22.0),
+                ),
+              ),
+              _eventData(),
+              // ListView.builder(
+              // itemCount: 1,//feed.items.length,
+              // itemBuilder: (BuildContext ctxt, int index) {
+              //   return Column(
+              //     children: <Widget>[
+              //         Padding(
+              //           padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+              //           child:SizedBox(
+              //             height: 500,
+              //             width: double.infinity,
+              //             child: _eventData(),
+              //           )
+              //         )
+              //     ]
+                // );
+              // })
+            ],
+          ),
+        ),
     ));
     
     
@@ -108,15 +122,15 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
   // }
 
     Widget _eventData(){
-
-      return new Container(
+      return new Expanded(
         child: FutureBuilder(
-
           future: getNewsFeed(),
           builder: (BuildContext context, AsyncSnapshot snapshot){
             if(snapshot.hasData){
               if(snapshot.data.length > 0){
                 return new ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index){
 
