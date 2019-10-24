@@ -30,7 +30,9 @@ dependencies:
     sdk: flutter
   splashscreen: ^1.2.0
   intl: ^0.16.0
+  # flutter_launcher_icons: ^0.7.3
 
+  
 
   
   # The following adds the Cupertino Icons font to your application.
@@ -40,7 +42,16 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  flutter_launcher_icons: "^0.7.3"
 
+flutter_icons:
+    android: true 
+    ios: true
+    image_path_ios: "assets/WISE_Icon_5125x512.jpg"
+    image_path_android: "assets/WISE_Icon_5125x512.jpg"
+    adaptive_icon_background: "#ffffff"
+    adaptive_icon_foreground: "assets/WISE_Icon_5125x512.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -64,6 +75,7 @@ flutter:
     - assets/WSIE_4COriginal.jpg
     - SIUE_cutout.png
     - WSIE_Logo_Cutout.png
+    - WISE_Icon_5125x512.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
