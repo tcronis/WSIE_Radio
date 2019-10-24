@@ -7,6 +7,7 @@ Widget networkError(){
         children: <Widget>[
           new Text("A network error has occurred: "),
           new Icon(Icons.network_locked),
+          new Text("Pull down to re-connect"),
         ],
       ),
     );

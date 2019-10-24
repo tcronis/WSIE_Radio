@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:page_indicator/page_indicator.dart';
+import 'package:wsie_radio/Pages/email_and_facebook_page.dart';
 
-import 'header_bar.dart';
-import 'stream_page.dart';
+// import 'stream_page.dart';
 //
-import 'header_bar.dart';
 import 'calendar_page.dart';
-import 'email_donations_page.dart';
-import 'facebook_page.dart';
+import 'email_and_facebook_page.dart';
+import 'donations_page.dart';
+import 'stream_page_2.dart';
 
 
 const SIUERed = const Color(0xFFe41c24);
@@ -36,7 +36,7 @@ class __PageHolder extends State<PageHolder>{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: headerBar(),
+      // appBar: headerBar(),
       body: new Container(
         color: Colors.white,
         child: Container(
@@ -44,9 +44,9 @@ class __PageHolder extends State<PageHolder>{
             pageView: PageView(
               children: <Widget>[
                 StreamPage(),
-                FacebookFeed(),
+                DonationsPage(),
                 Calendar(),
-                EmailAndDonations(),
+                EmailAndFacebookPage(),
 
                 
                 //Insert all of your page widgets here

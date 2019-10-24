@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import java.io.IOException;
 import java.nio.channels.Channel;
+import java.util.Map;
+import java.util.HashMap;
 
 import android.util.Log;
 import android.media.MediaPlayer;
@@ -29,7 +31,7 @@ public class MainActivity extends FlutterActivity {
     private static MediaPlayer player;
     private static final String CHANNEL = "wsie.get.radio/stream";
     private Boolean ready = false;
-    private String url = "http://streaming.siue.edu:8000/wsie.mp3";
+    private String url = "http://streaming.siue.edu:8000/wsie";
     private Boolean stopPlayingFlag = false;
 
     @Override
@@ -96,7 +98,12 @@ public class MainActivity extends FlutterActivity {
         if(Integer.valueOf(android.os.Build.VERSION.SDK) >= 25){
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
-                player.setDataSource(this, Uri.parse(url));
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "audio/mp3"); // change content type if necessary
+                headers.put("Accept-Ranges", "bytes");
+                headers.put("Status", "206");
+                headers.put("Cache-control", "no-cache");
+                player.setDataSource(url);
             } catch (IllegalArgumentException e) {
                 success_failure = false;
                 e.printStackTrace();
