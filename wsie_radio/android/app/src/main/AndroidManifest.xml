@@ -10,7 +10,7 @@
     <application
         android:usesCleartextTraffic="true"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="wsie_radio"
+        android:label="WSIE"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
