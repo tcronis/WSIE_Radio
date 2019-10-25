@@ -67,7 +67,7 @@ import AVFoundation
                 print("Unable to deactivate audio session: \(error.localizedDescription)")
             }
         } catch {
-            print("Unable to set playback category using .mixWIthOthers for AVAudioSession.sharedInstance()")
+            print("Unable to set playback category using .mixWithOthers for AVAudioSession.sharedInstance()")
         }
     }
 }
