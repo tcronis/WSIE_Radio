@@ -30,16 +30,39 @@ import AVFoundation
     lazy var playerQueue : AVQueuePlayer = {
         return AVQueuePlayer()
     }()
+    let audioSession = AVAudioSession.sharedInstance()
     
     private func startPlaying(){
-    let url = URL(string: "http://streaming.siue.edu:8000/wsie.mp3")!
-        
-    let playerItem = AVPlayerItem.init(url: url)
-    self.playerQueue.insert(playerItem, after: nil)
-    self.playerQueue.play()
+        let url = URL(string: "http://streaming.siue.edu:8000/wsie.mp3")!
+            
+        do{
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            do{
+                try audioSession.setActive(true)
+            } catch let error as NSError {
+                print("Unable to activate audio session: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Unable to set playback category for AVAudioSession.sharedInstance()")
+        }
+            
+        let playerItem = AVPlayerItem.init(url: url)
+        self.playerQueue.insert(playerItem, after: nil)
+        self.playerQueue.play()
     }
     
     private func stopPlaying(){
         self.playerQueue.removeAllItems()
+        
+        do{
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: [.mixWithOthers])
+            do{
+                try audioSession.setActive(false, options: [.notifyOthersOnDeactivation])
+            } catch let error as NSError {
+                print("Unable to deactivate audio session: \(error.localizedDescription)")
+            }
+        } catch {
+            print("Unable to set playback category using .mixWIthOthers for AVAudioSession.sharedInstance()")
+        }
     }
 }
