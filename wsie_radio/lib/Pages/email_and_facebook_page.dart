@@ -137,10 +137,10 @@ class __EmailAndFacebookPage extends State<EmailAndFacebookPage> with AutomaticK
           onTap: (){
             FocusScope.of(context).requestFocus(new FocusNode());
           },
-          child: new Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
+          child: ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 5.0),
                   child: Text(
@@ -152,9 +152,6 @@ class __EmailAndFacebookPage extends State<EmailAndFacebookPage> with AutomaticK
                         fontSize: heading_text_size),
                   ),
                 ),
-
-
-
                 new Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -315,11 +312,9 @@ class __EmailAndFacebookPage extends State<EmailAndFacebookPage> with AutomaticK
                       ),
                     ),
                   ],
-
-
                 )
               ],
-            ),      
+            )    
           ),
         ),
       ),
