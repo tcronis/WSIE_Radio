@@ -219,6 +219,7 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
             if(snapshot.hasData){
               if(snapshot.data != null){
                 
+                  //return new SingleChildScrollView(
                  //return new ListView.builder(
                    //itemCount: snapshot.data.length,
                    //itemBuilder: (BuildContext context, int index){
@@ -227,12 +228,12 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                     //for (int i = 0; i < snapshot.data.length; i++) 
       
                       //String eventData = snapshot.data.toString();
-                      
-                      //List eventData = snapshot.data[index].toString().split('########');
                       List eventData = snapshot.data.toString().split('########');
+                      //List eventData = snapshot.data[index].toString().split('########');
+                      
                     
                 
-                    return new Card(
+                     return new Card(
                         child: SingleChildScrollView(
                           //child: ListView.builder(
                           //itemCount: snapshot.data.length,
@@ -251,7 +252,7 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                           child: RichText(
                               text: TextSpan(children: [
                                 TextSpan(
-                                    text: "${eventData[0]} ...\n",
+                                    text: "$eventData ...\n",
                                     style: TextStyle(fontSize: 15, color: Colors.black)),
                                 
                               ])),
@@ -261,10 +262,10 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                         ),
                       )
                     //}
+                    //)
                     )
-                    );
                  //},
-                 //);
+                 );
               }
             } else{
              return Center(
