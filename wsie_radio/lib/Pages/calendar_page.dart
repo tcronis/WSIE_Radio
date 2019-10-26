@@ -50,10 +50,38 @@ Future<Map> getNewsFeed() async {
     Map map = new Map();
 
     for (int i = 0; i < NEWSFEED.items.length; i++) {
-      map[i] = NEWSFEED.items[i].title.toString() + "########" + NEWSFEED.items[i].pubDate.toString() + "########" + NEWSFEED.items[i].link.toString();
+      var str1 = NEWSFEED.items[i].pubDate.toString();
+      
+      map[i] = NEWSFEED.items[i].title.toString() + "########" + str1.substring(0,16) + "########" +
+       NEWSFEED.items[i].description.toString().substring(0, 100) +  "########" + NEWSFEED.items[i].link.toString();
     }
 
     return map;
+  }else {
+    throw Exception("Post could not be loaded.");
+  }
+}
+
+
+Future<Map> getNewsFeedDescription() async {
+
+  var client2 = http.Client();
+
+  final response2 = await client2.get("http://www.siue.edu/news/current.xml");
+
+  if(response2.statusCode == 200){
+
+    var NEWSFEED2 = new RssFeed.parse(response2.body);
+
+    Map map2 = new Map();
+
+    for (int i = 0; i < NEWSFEED2.items.length; i++) {
+      //var str1 = NEWSFEED.items[i].description.toString();
+      
+      map2[i] = NEWSFEED2.items[i].description.toString() + "########";
+    }
+
+    return map2;
   }else {
     throw Exception("Post could not be loaded.");
   }
@@ -85,7 +113,8 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                       height: 500,
                       width: double.infinity,
                       child: _eventData(),
-                    )
+                      
+                    ),
                   )
                ]
              );
@@ -96,17 +125,7 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
     
   }
 
-  // ListView _buildList(context) {
-    
-  //   // return ListView.builder(
-      
-  //   //   itemCount: 5, 
-  //   //   itemBuilder: (context, int) {
-  //   //     // DateCard for each date.
-  //   //     return DateCard(dateEvents[int]);
-  //   //   },
-  //   // );
-  // }
+  
 
     Widget _eventData(){
 
@@ -122,9 +141,24 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                   itemBuilder: (BuildContext context, int index){
 
                     List eventData = snapshot.data[index].toString().split('########');
-
+                
                     return Card(
-                        child:Padding(
+                      child: new InkWell(
+                        onTap: () {
+                          //print("tapped");
+                           //_popUpCard();
+                           //_showDialog();
+                           //_getNewsFeedDescription();
+
+                           SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                            child: _popUpCard(),
+                      
+                            );
+                        },
+                        child: Container(
+                          child:Padding(
                           padding:const EdgeInsets.all(10.0),
                           child: RichText(
                               text: TextSpan(children: [
@@ -134,8 +168,11 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                                 TextSpan(
                                     text: "Date Published: ${eventData[1]}\nLink:",
                                     style: TextStyle(fontSize: 15, color: Colors.black)),
+                                // TextSpan(
+                                //     text: "Description: ${eventData[2]} ...\n ",
+                                //     style: TextStyle(fontSize: 15, color: Colors.black)),
                                 TextSpan(
-                                    text: "${eventData[2]}",
+                                    text: "${eventData[3]}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.blue,
@@ -147,7 +184,12 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
                                       )
                               ])),
 
-                        )
+                        ),
+                        
+                        ),
+                      )
+                        
+                        
                     );
                   },
                 );
@@ -160,6 +202,86 @@ class __Calendar extends State<Calendar> with AutomaticKeepAliveClientMixin<Cale
           },
         ),
       );
+    }
+
+
+
+    Widget _popUpCard(){
+       showDialog(
+        context: context,
+        builder: (context){
+
+      //return new Container(
+        return new FutureBuilder(
+
+          future: getNewsFeedDescription(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.hasData){
+              if(snapshot.data != null){
+                
+                 //return new ListView.builder(
+                   //itemCount: snapshot.data.length,
+                   //itemBuilder: (BuildContext context, int index){
+
+                  //var map2 = getNewsFeedDescription();
+                    //for (int i = 0; i < snapshot.data.length; i++) 
+      
+                      //String eventData = snapshot.data.toString();
+                      
+                      //List eventData = snapshot.data[index].toString().split('########');
+                      List eventData = snapshot.data.toString().split('########');
+                    
+                
+                    return new Card(
+                        child: SingleChildScrollView(
+                          //child: ListView.builder(
+                          //itemCount: snapshot.data.length,
+                          //itemBuilder: (BuildContext context, int index){
+                            
+                        child: InkWell(
+                        onTap: () {
+                          //print("tapped");
+                           //_showDialog();
+                           Navigator.pop(context);
+                        },
+                        child: Container(
+                          //height: 200,
+                          child:Padding(
+                          padding:const EdgeInsets.all(10.0),
+                          child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: "${eventData[0]} ...\n",
+                                    style: TextStyle(fontSize: 15, color: Colors.black)),
+                                
+                              ])),
+
+                        ),
+                        
+                        ),
+                      )
+                    //}
+                    )
+                    );
+                 //},
+                 //);
+              }
+            } else{
+             return Center(
+               child: new CircularProgressIndicator(),
+             );
+            }
+          },
+        );
+     //);
+
+        }
+        
+         
+
+      );
+       
+
     }
   
 
