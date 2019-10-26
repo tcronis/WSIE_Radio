@@ -53,7 +53,7 @@ Future<Map> getNewsFeed() async {
     Map map = new Map();
 
     for (int i = 0; i < NEWSFEED.items.length; i++) {
-      map[i] = NEWSFEED.items[i].title.toString() + "########" + NEWSFEED.items[i].pubDate.toString() + "########" + NEWSFEED.items[i].link.toString();
+      map[i] = NEWSFEED.items[i].title.toString() + "########" + NEWSFEED.items[i].pubDate.toString().substring(0,16) + "########" + NEWSFEED.items[i].link.toString();
     }
 
     return map;
