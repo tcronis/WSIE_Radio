@@ -307,8 +307,9 @@ class __EmailAndFacebookPage extends State<EmailAndFacebookPage> with AutomaticK
                         "This application was designed and developed\n by SIUE's department of computer science",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.black,
-                            fontSize: body_text_size),
+                            color: SIUERed,
+                            fontSize: body_text_size,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
