@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import './Pages/page_container.dart';
-import 'package:splashscreen/splashscreen.dart';
 import 'dart:async';
 
 

@@ -15,7 +15,7 @@ const card_padding = 15.0;
 const card_text_size = 15.0;
 const heading_text_size = 20.0;
 
-Post cachedPost = null;
+Post cachedPost;
 
 class StreamPage extends StatefulWidget{
   @override
@@ -29,14 +29,14 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
   Timer _timer;                                                                       //timer used in to time when to try and grab more album data when current streamin the radio   
   String playStopText = "Play Live Radio";                                            //string used to display the text in Play/Stop live radio button on the UI           
   RefreshController _refreshController = RefreshController(initialRefresh: false);    //controller used for the pull to refresh the songContainer 
-  static Post cachedPost = null;                                                      //variable used to cach the most current song being played
-  static Post cachedPost2 = null;                                                     //variable used in the _timer function that will check to see if the cachedPost has changed, if so then it will refresh the app
-  static DateTime startTime = null;                                                   //keeps track of time duration between advertisement showing
-  static DateTime runTime = null;                                                     //keeps track of the length that the current advertisement is showing for and will reset each time
+  static Post cachedPost;                                                             //variable used to cach the most current song being played
+  static Post cachedPost2;                                                            //variable used in the _timer function that will check to see if the cachedPost has changed, if so then it will refresh the app
+  static DateTime startTime;                                                          //keeps track of time duration between advertisement showing
+  static DateTime runTime;                                                            //keeps track of the length that the current advertisement is showing for and will reset each time
   static bool showAdvert = false;                                                     //bool used to signifiy if the __imageHolder should show the advert. or not
   static bool counting = false;                                                       //bool used to make sure it doens't keep entering the loop to start the advert. 
   static String cachediTunesURL = "";                                                 //cachedString value of iTunes URLs
-  
+
   /* 
     * Main Functionality - used to toggle the live stream of the radio via communication channels
       - Will call either the iOS or Android code
@@ -328,7 +328,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                   ),
                 );
               }
-              //the WSIE returned a null reponse for the given date, but still responded okay
+              //the WSIE returned a null reponse for the given date, thus display a network error and the user can refresh when they want to query for data again
               else{
                 return new SmartRefresher(
                   enablePullDown: true,
@@ -369,8 +369,15 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
 
 
-
+  /*
+    * Main Functionality - this widget displays the the WSIE logo by default, but will display the album artwork for a given live streaming song if possible
+      - Will call __getAlbumURL() to get the iTunes link for the album artowrk if possible
+      - If an album artwork isn't found, then it will just display the WSIE logo by default
+      - If a network error occurs, then the WSIE logo will re-display in the mean time
+      - This will also display the advertisement when the 30 second time peroid is reached
+  */
   Widget __imageHolder(bool play){
+    //By default, if the user isn't live streaming the radio then the WSIE logo is displayed
     if(!play){
       return Image.asset(
         '././assets/WSIE_Logo_Cutout.png',
@@ -378,18 +385,18 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
         width: 200,
         height: 200,
       );
-    }else if(play && !showAdvert){
+    }
+    //The user is live streaming the radio, but the advert. isn't suppose to show yet. Thus call the album artowrk iTunes api to grab the url if its not already been stored
+    else if(play && !showAdvert){
       return Container(
         width: 200,
         height: 200,
         child: FutureBuilder(
           future: (__getAlbumURL()),
           builder: (BuildContext context, AsyncSnapshot snapshot){
-            // print("snapshot data - " + snapshot.data.toString());
             //this will check to make sure that the returned data isn't a repeat of previous data (itunes URL) and actually contains data before showing anything
             if(snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data.toString() !=  "no matching url"){
-              // print("Re-creating the CachedNetowrkImage");
-              // print(snapshot.data.toString());
+              //create the new iTune URL album artwork network image
               return CachedNetworkImage(
                   placeholder: (context, url) => Image.asset(
                     '././assets/WSIE_Logo_Cutout.png',
@@ -397,15 +404,14 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                     width: 200,
                     fit: BoxFit.contain,
                   ),
-                  errorWidget: (context, url, error) => new Icon(Icons.error),
+                  errorWidget: (context, url, error) => new Image.asset("././assets/WSIE_Logo_Cutout.png", height: 200, width: 200, fit: BoxFit.contain),
                   imageUrl: '${snapshot.data}',
                   height: 200,
                   width: 200,
                 );
             }
-            //if the connction isn't done, but the snapshot has an old URL (usually called when the user forces a refresh while streaming)
+            //if the connction isn't complete, but the snapshot has an old URL (usually called when the user forces a refresh while streaming)
             else if(snapshot.connectionState != ConnectionState.done && snapshot.data != null && snapshot.data.toString() != "no matching url"){
-              // print("Re-creating the cachedNetworkImage, but using an old URL instead");
               return CachedNetworkImage(
                 placeholder: (context, url) => Image.asset(
                   '././assets/WSIE_Logo_Cutout.png',
@@ -413,13 +419,13 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
                   width: 200,
                   fit: BoxFit.contain,
                 ),
-                errorWidget: (context, url, error) => new Icon(Icons.error),
+                errorWidget: (context, url, error) => new Image.asset("././assets/WSIE_Logo_Cutout.png", height: 200, width: 200, fit: BoxFit.contain),
                 imageUrl: '${snapshot.data}',
                 height: 200,
                 width: 200,
               );
             }
-            //the snapshot either doesn't have data from the itunes API call
+            //the snapshot doesn't have data from the itunes API call, re-display the WSIE logo
             else{
               return Image.asset(
                   '././assets/WSIE_Logo_Cutout.png',
@@ -431,7 +437,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
           },
         ),
       );
-    }else if(play && showAdvert){
+    }
+    //The user is live streaming the radio, but the 60 seconds is up and the advert. needs to show
+    else if(play && showAdvert){
       return Container(
         width: 200,
         height: 200,
@@ -449,28 +457,34 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
   }
 
-  static DateTime songPlayTime = null;
 
-  // API call to grab the album data, currently uses the iTune web API for building the album data
+
+  /*
+    * Main Functionality - the function will access the iTunes API to obtain a URL to the live streaming song on WSIE
+      - the iTunes API is open sourced and doesn't require an authentification as of 10/29/19
+        - Most of song data API's require an API key which throttles the request rates, if used here then multiple version of the app running on the same causes a block
+      - The function will attempt to score the results from the iTunes API based on relevant items (i.e. artist's name, track name, etc)
+      - If a result isn't found to match the given song from WSIE's sever, then "no matching url" will be returned to the __imageHolder widget which will re-display the WSIE logo
+  */
   Future<String> __getAlbumURL() async{
-    final currentStreamData = await getPost(DateTime.now().toString());
-    // print("cachedPost - " + cachedPost.album.toString());
-    // print("currentStreamData - " + currentStreamData[0].album.toString());
+    final currentStreamData = await getPost(DateTime.now().toString()); //call to obtain the song being played on WSIE's sever
+    //if the POST hasn't already been cached and is an actual new song, then this block will call the iTunes API
     if(currentStreamData.length > 0 && (cachedPost == null || (cachedPost != null && cachedPost != currentStreamData[0]))){
-      // print("new song being played!" + currentStreamData[0].artist);
-      cachedPost = currentStreamData[0];
-      Post data = currentStreamData[0];
+      cachedPost = currentStreamData[0];  //caching the new post
+      Post data = currentStreamData[0];   //temp sort the new post to use in itunes query
       String url = "http://itunes.apple.com/search?term=" + data.title +" " + data.artist;  //Base API url with the addition of the Current artist and title of the song playing
       final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"}); //encoing of the response
+      //if iTunes responded with data and has an okay response code
       if(response.statusCode == 200 && response.body.toString().length > 0){
         final jsonResponse = json.decode(response.body);  //decoding the JSON to an array object
-        if(jsonResponse['resultCount'] > 0){
-          int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabving the number of object in the array
-          int best = -1;
-          int location = -1;
-          //if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
-            //based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE
+        if(jsonResponse['resultCount'] > 0){              //making sure that the response isn't just a null JSON object
+          int numResults = int.parse(jsonResponse['resultCount'].toString()); //grabing the number of object in the array
+          int best = -1;      //temp itunes object to keep track of the best result from iTunes
+          int location = -1;  //temp iterator
+          /*if the number of results is greater then one, then it will iterate through the results to try and find the best fitting album artwork
+            based on how closely the artist's name and song name matches the info pulled from the IceCast stream server ran by SIUE*/
           if(numResults > 0){
+            //will iterate through the results and score each object
             for(int i=0; i < numResults; i++){
               int count = -1;  
               if(data.artist.toUpperCase() == jsonResponse['results'][i]['artistName'].toString().toUpperCase())
@@ -487,32 +501,19 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
             if(location != -1){
               //These line will alter the size of the image from the iTune API, it will alter the meta tags to give a correctly fitting picture size
               String resultURL = jsonResponse['results'][location]['artworkUrl100'].toString();
-              int miliSecondRunTime = int.tryParse(jsonResponse['results'][location]['trackTimeMillis'].toString());
-              songPlayTime = DateTime.now().add(new Duration(milliseconds: miliSecondRunTime));
-              print("Song - " + data.artist + ", " + data.title);
-              print("Time the song started: " + data.playtime + " Expected song end time: " + songPlayTime.toString() + " milisecond runtime from iTunes "  + miliSecondRunTime.toString() + "\n");
-
-
-
               int pos = resultURL.indexOf('source') + 7;
               String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
-              // print("returning - " + finalUrl);
               cachediTunesURL = finalUrl;
               return finalUrl;
             }
             //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
             else{
-              // print("returning null - 1");
               return "no matching url";
             }
-              // return null;
-
           }
           else{
-            // print("returning null - 2");
             return cachediTunesURL;
           }
-            // return null;
         }
       }
       else {
@@ -520,34 +521,41 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
       }
 
     } else {
-      // print("returning null - 3");
       return cachediTunesURL;
     }
   }
 
+  /*
+    * Main Functionality - grab the song data from the WSIE REST API, will be given a json object
+  */
+
   Future <List<Post>> getPost(String date) async{
+    //substring-ing the date object to format for the WSIE API
     String temp = date.substring(0,4);
     temp += date.substring(5, 7);
     temp += date.substring(8,10);
-    // print("calling to get another post: " + DateTime.now().toString());
-
+    //attempting to get the JSON object from WSIE
     try{
       String url = "http://streaming.siue.edu:8001/whats_playing?view=json&request=play_data&t=" + temp;
       final response = await http.get(Uri.encodeFull(url), headers: {"Accept" : "application/json"});
+      //if the response was okay and if it wasn't an empty JSON object
       if(response.statusCode == 200 && response.body.toString().length > 0){
-        final jsonResponse = json.decode(response.body);
-        List<Post> data = new List<Post>();
+        final jsonResponse = json.decode(response.body); 
+        List<Post> data = new List<Post>(); //temp object to store the results of the call
         for(int i=0; i < jsonResponse.length; i++){
           data.add(new Post.fromJson(jsonResponse[i]));
         }
         return data;
       }
+      //bad HTTP request
       else {
         print("response code of bad http call: $response.statusCode");
         List<Post> nullReturn = new List<Post>();
         return nullReturn;
       }
-    }catch(e){
+    }
+    //the HTTP failed and didn't get an HTTP response
+    catch(e){
       print("exception: $e");
       List<Post> temp = new List<Post>();
       return temp;
@@ -562,7 +570,10 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
 
 
 
-//This is the class that will hold a post (or the data from the site) from the SIUE IceCast sever
+  /*
+    * Main Functionality - a custom class to holds a song post from the WSIE JSON object
+      - a custom override of the == operator so that Posts can be compared literally 
+  */
 class Post{
   final String album;
   final String artist;
@@ -571,7 +582,7 @@ class Post{
   final String playtime;
   //constructor
   Post({this.album, this.artist, this.timestap, this.title, this.playtime});
-
+  //storing the object
   factory Post.fromJson(Map<String, dynamic> json){
     return Post(
       album: json['album'],
@@ -582,7 +593,7 @@ class Post{
       // appleLink: json['links:0:value'],
     );
   }
-
+  //override of the == operator
   @override
  bool operator ==(Object other) =>
   identical(this, other) ||
