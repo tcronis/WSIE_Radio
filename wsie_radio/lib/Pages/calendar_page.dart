@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:webfeed/webfeed.dart';
@@ -50,10 +52,19 @@ Future<Map> getNewsFeed() async {
 
     var NEWSFEED = new RssFeed.parse(response.body);
 
+
+    
+
+
+
     Map map = new Map();
 
     for (int i = 0; i < NEWSFEED.items.length; i++) {
-      map[i] = NEWSFEED.items[i].title.toString() + "########" + NEWSFEED.items[i].pubDate.toString().substring(0,16) + "########" + NEWSFEED.items[i].link.toString();
+
+      String temp = utf8.decode(NEWSFEED.items[i].title.codeUnits);
+
+
+      map[i] = temp + "########" + NEWSFEED.items[i].pubDate.toString().substring(0,16) + "########" + NEWSFEED.items[i].link.toString();
     }
 
     return map;
