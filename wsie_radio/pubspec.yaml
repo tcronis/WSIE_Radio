@@ -76,6 +76,7 @@ flutter:
     - SIUE_cutout.png
     - WSIE_Logo_Cutout.png
     - WISE_Icon_5125x512.jpg
+    - advert.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

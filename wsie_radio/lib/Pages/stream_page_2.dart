@@ -9,12 +9,9 @@ import 'dart:async';
 import 'dart:convert';
 const SIUERed = const Color(0xFFe41c24);
 const platform = const MethodChannel('wsie.get.radio/stream');
-
-
 const card_padding = 15.0;
 const card_text_size = 15.0;
 const heading_text_size = 20.0;
-
 Post cachedPost;
 
 class StreamPage extends StatefulWidget{
@@ -440,17 +437,11 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
     }
     //The user is live streaming the radio, but the 60 seconds is up and the advert. needs to show
     else if(play && showAdvert){
-      return Container(
+      return Image.asset(
+        "././assets/advert.png",
+        fit: BoxFit.contain,
         width: 200,
         height: 200,
-        child: new Text(
-          'advert show',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: SIUERed,
-          ),
-        ),
       );
     }
 
