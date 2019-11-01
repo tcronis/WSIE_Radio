@@ -22,6 +22,7 @@ class DonationsPage extends StatefulWidget {
   State createState() => new __DonationsPage();
 }
 
+//Function that launches input url
 void _launchURL(String IncomingUrl) async {
   String url = IncomingUrl;
   if (await canLaunch(url)) {
@@ -31,18 +32,19 @@ void _launchURL(String IncomingUrl) async {
   }
 }
 
+//Function that pulls the rss from a given URl
 Future<Map> fetchLatestNews() async {
   var client = http.Client();
-  final response = await client.get("https://developer.apple.com/news/releases/rss/releases.rss");
+  final response = await client.get("https://developer.apple.com/news/releases/rss/releases.rss");      //Change URL when page is finished
 
-  if(response.statusCode == 200){
+  if(response.statusCode == 200){                                                                       //If status code is 200, parse the feed
     var RSSFEED = new RssFeed.parse(response.body);
-    Map map = new Map();
-    for (int i = 0; i < RSSFEED.items.length; i++) {
-      map[i] = RSSFEED.items[i].title.toString() + "########" + RSSFEED.items[i].link.toString();
+    Map map = new Map();                                                                                //Creates map to store relevant parts of the feed
+    for (int i = 0; i < RSSFEED.items.length; i++) {                                                    //Gets the number of items in the feed
+      map[i] = RSSFEED.items[i].title.toString() + "########" + RSSFEED.items[i].link.toString();       //Concats the title and link, and inserts them into the map
     }
 
-    return map;
+    return map;                                                                                         //Returns the map
   }else {
     throw Exception("Failed to load post.");
   }
@@ -66,7 +68,7 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   
-                  Padding(
+                  Padding(  //Title
                     padding: const EdgeInsets.fromLTRB(5.0, 20.0, 5.0, 5.0),
                     child: Text(
                       'Donation Information:',
@@ -79,7 +81,7 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                     ),
                   ),
                   
-                  Padding(
+                  Padding(  // Gives user information about WSIE
                     padding: const EdgeInsets.all(5.0),
                     child:Text(
                       'WSIE 88.7 The Sound is completely funded by donations from our community; If you like what you are hearing, please consider donating! ',
@@ -90,7 +92,7 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                     ),
                   ),
                   
-                  Padding(
+                  Padding(  // Donation button, onPressed set to go to donations page
                     padding: const EdgeInsets.all(5.0),
                     child: SizedBox(
                       width: 330.0,
@@ -104,7 +106,7 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                     ),
                   ),
                    
-                  Padding(
+                  Padding(  // Title
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
                       'Underwriter Information:',
@@ -125,6 +127,8 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
     );
   }
 
+  // creates the scrollable cards, one for every item in the feed
+
   Widget __songContainer(){
 
       return new Expanded(
@@ -136,16 +140,16 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                 return new ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: snapshot.data.length,
+                  itemCount: snapshot.data.length,                                            //gets number of items in rssFeed
                   itemBuilder: (BuildContext context, int index){
-                    List titleAndLinks = snapshot.data[index].toString().split('########');
+                    List titleAndLinks = snapshot.data[index].toString().split('########');   //separates link and title by splitting by token
                     return Card(
                         child:Padding(
                           padding:const EdgeInsets.all(card_padding),
                           child: RichText(
                               text: TextSpan(children: [
                                 TextSpan(
-                                    text: "Title: ${titleAndLinks[0]}\n",
+                                    text: "Title: ${titleAndLinks[0]}\n",                    //Creates card with title and clickable link
                                     style: TextStyle(fontSize: card_text_size, color: Colors.black)),
                                 TextSpan(
                                     text: "Link to article",
@@ -155,11 +159,9 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
                                         decoration: TextDecoration.underline),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        _launchURL(titleAndLinks[1]);
+                                        _launchURL(titleAndLinks[1]);                       //Opens link from rss feed
                                       })
                               ])),
-//                          child:
-//                          Text("Title: ${titleAndLinks[0]}\nLink:${titleAndLinks[1]}"),
                         )
                     );
                   },
@@ -167,7 +169,7 @@ class __DonationsPage extends State<DonationsPage> with AutomaticKeepAliveClient
               }
             } else{
               return Center(
-                child: new CircularProgressIndicator(),
+                child: new CircularProgressIndicator(),                                     //Throws Circular loading icon if feed can't be pulled
               );
             }
           },
