@@ -39,6 +39,7 @@ class __PageHolder extends State<PageHolder>{
       body: new Container(
         color: Colors.white,
         child: Container(
+          width: MediaQuery.of(context).size.width,
           child: PageIndicatorContainer(
             pageView: PageView(
               children: <Widget>[

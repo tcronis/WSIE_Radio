@@ -392,7 +392,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
           future: (__getAlbumURL()),
           builder: (BuildContext context, AsyncSnapshot snapshot){
             //this will check to make sure that the returned data isn't a repeat of previous data (itunes URL) and actually contains data before showing anything
-            if(snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data.toString() !=  "no matching url"){
+            if(snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data.toString() != "no matching url"){
               //create the new iTune URL album artwork network image
               return CachedNetworkImage(
                   placeholder: (context, url) => Image.asset(
@@ -495,6 +495,7 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
               int pos = resultURL.indexOf('source') + 7;
               String finalUrl = resultURL.substring(0, pos) + "200x200.jpg";
               cachediTunesURL = finalUrl;
+              print("New URL : " + finalUrl.toString() + "\n");
               return finalUrl;
             }
             //if there wasn't a mathcing URL found, then it will just re-display the WSIE logo in the background instead of showing the wrong album artwork
@@ -502,8 +503,9 @@ class __StreamPage extends State<StreamPage> with AutomaticKeepAliveClientMixin<
               return "no matching url";
             }
           }
+          //if the itunes object returned no results
           else{
-            return cachediTunesURL;
+            return "no matching url";
           }
         }
       }
